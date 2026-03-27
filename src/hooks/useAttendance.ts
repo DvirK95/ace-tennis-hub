@@ -1,37 +1,37 @@
 import { useState } from "react";
 import { useAttendanceStore } from "@/stores/useAttendanceStore";
-import { useTraineeStore } from "@/stores/useTraineeStore";
+import { usePersonStore } from "@/stores/usePersonStore";
 import { useGroupStore } from "@/stores/useGroupStore";
 import type { AttendanceStatus } from "@/types/schemas";
 
 export function useAttendance(groupId: string) {
   const { groups } = useGroupStore();
-  const { trainees, incrementMakeupCredits } = useTraineeStore();
+  const { people, incrementMakeupCredits } = usePersonStore();
   const { setAttendance, records } = useAttendanceStore();
   const [sessionDate, setSessionDate] = useState(() => new Date().toISOString().split("T")[0]);
 
   const group = groups.find((g) => g.id === groupId);
-  const groupTrainees = trainees.filter((t) => group?.traineeIds.includes(t.id));
+  const groupMembers = people.filter((p) => group?.memberIds.includes(p.id));
 
   const sessionRecords = records.filter(
     (r) => r.groupId === groupId && r.sessionDate === sessionDate
   );
 
-  function getStatus(traineeId: string): AttendanceStatus | undefined {
-    return sessionRecords.find((r) => r.traineeId === traineeId)?.status;
+  function getStatus(userId: string): AttendanceStatus | undefined {
+    return sessionRecords.find((r) => r.userId === userId)?.status;
   }
 
-  function markAttendance(traineeId: string, status: AttendanceStatus) {
-    const prev = getStatus(traineeId);
-    setAttendance(groupId, sessionDate, traineeId, status);
+  function markAttendance(userId: string, status: AttendanceStatus) {
+    const prev = getStatus(userId);
+    setAttendance(groupId, sessionDate, userId, status);
     if (status === "Cancelled_Eligible" && prev !== "Cancelled_Eligible") {
-      incrementMakeupCredits(traineeId);
+      incrementMakeupCredits(userId);
     }
   }
 
   return {
     group,
-    groupTrainees,
+    groupMembers,
     sessionDate,
     setSessionDate,
     getStatus,

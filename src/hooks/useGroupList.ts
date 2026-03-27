@@ -9,7 +9,7 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 import { useGroupStore } from "@/stores/useGroupStore";
-import { useCoachStore } from "@/stores/useCoachStore";
+import { usePersonStore } from "@/stores/usePersonStore";
 import { useCourtStore } from "@/stores/useCourtStore";
 import type { Group, GroupFormValues } from "@/types/schemas";
 
@@ -17,13 +17,14 @@ const columnHelper = createColumnHelper<Group>();
 
 export function useGroupList() {
   const { groups, addGroup, updateGroup, deleteGroup } = useGroupStore();
-  const { coaches } = useCoachStore();
+  const people = usePersonStore((s) => s.people);
   const { courts } = useCourtStore();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [editingGroup, setEditingGroup] = useState<Group | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  const coaches = useMemo(() => people.filter((p) => p.roles.includes("COACH")), [people]);
   const coachMap = useMemo(() => new Map(coaches.map((c) => [c.id, c.name])), [coaches]);
   const courtMap = useMemo(() => new Map(courts.map((c) => [c.id, c.name])), [courts]);
 
@@ -34,7 +35,7 @@ export function useGroupList() {
         header: "Coach",
         cell: (info) => coachMap.get(info.getValue()) ?? "—",
       }),
-      columnHelper.accessor("traineeIds", {
+      columnHelper.accessor("memberIds", {
         header: "Members",
         cell: (info) => info.getValue().length,
         enableSorting: false,

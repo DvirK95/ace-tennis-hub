@@ -19,47 +19,38 @@ export type CourtFormValues = z.infer<typeof courtFormSchema>;
 export type SurfaceType = z.infer<typeof surfaceTypeSchema>;
 export type CourtStatus = z.infer<typeof courtStatusSchema>;
 
-// ─── Trainees ────────────────────────────────────────────
-export const skillLevelSchema = z.enum(["Beginner", "Intermediate", "Advanced"]);
-export const membershipStatusSchema = z.enum(["Active", "Inactive"]);
+// ─── User Roles ──────────────────────────────────────────
+export const userRoleSchema = z.enum(["ADMIN", "COACH", "TRAINEE"]);
+export type UserRole = z.infer<typeof userRoleSchema>;
+export const USER_ROLES: UserRole[] = ["ADMIN", "COACH", "TRAINEE"];
 
-export const traineeSchema = z.object({
+// ─── Club Users (Unified Entity) ─────────────────────────
+export const clubUserSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
   phone: z.string().min(1, "Phone is required"),
-  birthdate: z.string().min(1, "Birthdate is required"),
-  membershipStatus: membershipStatusSchema,
-  skillLevel: skillLevelSchema,
-  makeupCredits: z.number().int().min(0),
+  birthdate: z.string().optional(),
+  roles: z.array(userRoleSchema).min(1, "At least one role is required"),
+  membershipStartDate: z.string().optional(),
+  membershipEndDate: z.string().optional(),
+  notes: z.string().optional(),
+  makeupCredits: z.number().int().min(0).default(0),
+  specializations: z.string().optional(),
+  hourlyRate: z.number().positive().optional(),
 });
 
-export const traineeFormSchema = traineeSchema.omit({ id: true, makeupCredits: true });
+export const clubUserFormSchema = clubUserSchema.omit({ id: true, makeupCredits: true });
 
-export type Trainee = z.infer<typeof traineeSchema>;
-export type TraineeFormValues = z.infer<typeof traineeFormSchema>;
-
-// ─── Coaches ─────────────────────────────────────────────
-export const coachSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email"),
-  phone: z.string().min(1, "Phone is required"),
-  specializations: z.string().min(1, "Specializations required"),
-  hourlyRate: z.number().positive("Rate must be positive"),
-});
-
-export const coachFormSchema = coachSchema.omit({ id: true });
-
-export type Coach = z.infer<typeof coachSchema>;
-export type CoachFormValues = z.infer<typeof coachFormSchema>;
+export type ClubUser = z.infer<typeof clubUserSchema>;
+export type ClubUserFormValues = z.infer<typeof clubUserFormSchema>;
 
 // ─── Groups ──────────────────────────────────────────────
 export const groupSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1, "Group name is required"),
   coachId: z.string().uuid("Select a coach"),
-  traineeIds: z.array(z.string().uuid()),
+  memberIds: z.array(z.string().uuid()),
   schedule: z.string().min(1, "Schedule is required"),
   courtId: z.string().uuid("Select a court"),
 });
@@ -69,34 +60,64 @@ export const groupFormSchema = groupSchema.omit({ id: true });
 export type Group = z.infer<typeof groupSchema>;
 export type GroupFormValues = z.infer<typeof groupFormSchema>;
 
-// ─── Bookings ────────────────────────────────────────────
-export const bookingStatusSchema = z.enum(["PENDING_APPROVAL", "APPROVED", "REJECTED"]);
+// ─── Calendar Events ────────────────────────────────────
+export const eventTypeSchema = z.enum(["SESSION", "PRIVATE", "BLOCKOUT"]);
+export const recurrenceTypeSchema = z.enum(["NONE", "DAILY", "WEEKLY", "MONTHLY"]);
+export const eventStatusSchema = z.enum(["PENDING_APPROVAL", "APPROVED", "REJECTED", "CANCELLED"]);
 
-export const bookingSchema = z.object({
+export const calendarEventSchema = z.object({
   id: z.string().uuid(),
-  requesterId: z.string().uuid(),
-  requesterName: z.string(),
+  title: z.string().min(1, "Title is required"),
+  eventType: eventTypeSchema,
+  courtId: z.string().uuid().optional(),
+  allCourts: z.boolean().default(false),
+  assigneeId: z.string().uuid().optional(),
+  groupId: z.string().uuid().optional(),
   date: z.string().min(1, "Date is required"),
-  timeSlot: z.string().min(1, "Time slot is required"),
-  courtId: z.string().uuid("Select a court"),
-  status: bookingStatusSchema,
-  useMakeupCredit: z.boolean().default(false),
-  traineeId: z.string().uuid().optional(),
+  startTime: z.string().min(1, "Start time is required"),
+  endTime: z.string().min(1, "End time is required"),
+  recurrence: recurrenceTypeSchema.default("NONE"),
+  status: eventStatusSchema.default("APPROVED"),
 });
 
-export const bookingFormSchema = z.object({
-  requesterId: z.string().uuid(),
-  requesterName: z.string().min(1),
+export const eventFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  eventType: eventTypeSchema,
+  courtId: z.string().optional(),
+  allCourts: z.boolean().default(false),
+  assigneeId: z.string().optional(),
+  groupId: z.string().optional(),
   date: z.string().min(1, "Date is required"),
-  timeSlot: z.string().min(1, "Time slot is required"),
-  courtId: z.string().uuid("Select a court"),
-  useMakeupCredit: z.boolean().default(false),
-  traineeId: z.string().uuid().optional(),
+  startTime: z.string().min(1, "Start time is required"),
+  endTime: z.string().min(1, "End time is required"),
+  recurrence: recurrenceTypeSchema.default("NONE"),
 });
 
-export type Booking = z.infer<typeof bookingSchema>;
-export type BookingFormValues = z.infer<typeof bookingFormSchema>;
-export type BookingStatus = z.infer<typeof bookingStatusSchema>;
+export type CalendarEvent = z.infer<typeof calendarEventSchema>;
+export type EventFormValues = z.infer<typeof eventFormSchema>;
+export type EventType = z.infer<typeof eventTypeSchema>;
+export type RecurrenceType = z.infer<typeof recurrenceTypeSchema>;
+export type EventStatus = z.infer<typeof eventStatusSchema>;
+
+// ─── User Tasks ─────────────────────────────────────────
+export const userTaskSchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string().uuid(),
+  taskText: z.string().min(1, "Task text is required"),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().min(1, "End date is required"),
+  isComplete: z.boolean().default(false),
+});
+
+export const taskFormSchema = z.object({
+  userId: z.string().uuid("Select a user"),
+  taskText: z.string().min(1, "Task text is required"),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().min(1, "End date is required"),
+});
+
+export type UserTask = z.infer<typeof userTaskSchema>;
+export type TaskFormValues = z.infer<typeof taskFormSchema>;
 
 // ─── Attendance ──────────────────────────────────────────
 export const attendanceStatusSchema = z.enum(["Present", "Absent", "Cancelled_Eligible"]);
@@ -105,7 +126,7 @@ export const attendanceRecordSchema = z.object({
   id: z.string().uuid(),
   groupId: z.string().uuid(),
   sessionDate: z.string(),
-  traineeId: z.string().uuid(),
+  userId: z.string().uuid(),
   status: attendanceStatusSchema,
 });
 
