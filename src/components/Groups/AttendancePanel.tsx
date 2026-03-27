@@ -15,22 +15,22 @@ interface AttendancePanelProps {
 }
 
 interface AttendanceRowProps {
-  traineeId: string;
-  traineeName: string;
+  userId: string;
+  userName: string;
   status: AttendanceStatus | undefined;
-  onMark: (traineeId: string, status: AttendanceStatus) => void;
+  onMark: (userId: string, status: AttendanceStatus) => void;
 }
 
-function AttendanceRow({ traineeId, traineeName, status, onMark }: AttendanceRowProps) {
+function AttendanceRow({ userId, userName, status, onMark }: AttendanceRowProps) {
   return (
     <div className="flex items-center justify-between py-2 border-b last:border-0">
-      <span className="text-sm font-medium">{traineeName}</span>
+      <span className="text-sm font-medium">{userName}</span>
       <div className="flex items-center gap-3">
         {status && <StatusBadge status={status} />}
         <label className="flex items-center gap-1.5 text-xs">
           <Checkbox
             checked={status === "Present"}
-            onCheckedChange={() => onMark(traineeId, "Present")}
+            onCheckedChange={() => onMark(userId, "Present")}
           />
           Present
         </label>
@@ -38,7 +38,7 @@ function AttendanceRow({ traineeId, traineeName, status, onMark }: AttendanceRow
           variant="outline"
           size="sm"
           className="text-xs h-7"
-          onClick={() => onMark(traineeId, "Cancelled_Eligible")}
+          onClick={() => onMark(userId, "Cancelled_Eligible")}
           disabled={status === "Cancelled_Eligible"}
         >
           Cancel (+ Credit)
@@ -49,7 +49,7 @@ function AttendanceRow({ traineeId, traineeName, status, onMark }: AttendanceRow
 }
 
 export default function AttendancePanel({ groupId, open, onOpenChange }: AttendancePanelProps) {
-  const { group, groupTrainees, sessionDate, setSessionDate, getStatus, markAttendance } =
+  const { group, groupMembers, sessionDate, setSessionDate, getStatus, markAttendance } =
     useAttendance(groupId);
 
   if (!group) return null;
@@ -63,15 +63,15 @@ export default function AttendancePanel({ groupId, open, onOpenChange }: Attenda
         <div className="space-y-4">
           <Input type="date" value={sessionDate} onChange={(e) => setSessionDate(e.target.value)} className="max-w-48" />
           <div>
-            {groupTrainees.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4">No trainees in this group.</p>
+            {groupMembers.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-4">No members in this group.</p>
             ) : (
-              groupTrainees.map((t) => (
+              groupMembers.map((m) => (
                 <AttendanceRow
-                  key={t.id}
-                  traineeId={t.id}
-                  traineeName={t.name}
-                  status={getStatus(t.id)}
+                  key={m.id}
+                  userId={m.id}
+                  userName={m.name}
+                  status={getStatus(m.id)}
                   onMark={markAttendance}
                 />
               ))

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { groupFormSchema, type GroupFormValues, type Group, type Coach, type Court } from "@/types/schemas";
-import { useTraineeStore } from "@/stores/useTraineeStore";
+import { groupFormSchema, type GroupFormValues, type Group, type ClubUser, type Court } from "@/types/schemas";
+import { usePersonStore } from "@/stores/usePersonStore";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
@@ -14,26 +14,28 @@ import {
 import {
   Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 } from "@/components/ui/form";
+import { useMemo } from "react";
 
 interface GroupFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: GroupFormValues) => void;
   editingGroup: Group | null;
-  coaches: Coach[];
+  coaches: ClubUser[];
   courts: Court[];
 }
 
 export default function GroupFormDialog({
   open, onOpenChange, onSubmit, editingGroup, coaches, courts,
 }: GroupFormDialogProps) {
-  const { trainees } = useTraineeStore();
+  const people = usePersonStore((s) => s.people);
+  const members = useMemo(() => people.filter((p) => p.roles.includes("TRAINEE")), [people]);
 
   const form = useForm<GroupFormValues>({
     resolver: zodResolver(groupFormSchema),
     defaultValues: editingGroup
-      ? { name: editingGroup.name, coachId: editingGroup.coachId, traineeIds: editingGroup.traineeIds, schedule: editingGroup.schedule, courtId: editingGroup.courtId }
-      : { name: "", coachId: "", traineeIds: [], schedule: "", courtId: "" },
+      ? { name: editingGroup.name, coachId: editingGroup.coachId, memberIds: editingGroup.memberIds, schedule: editingGroup.schedule, courtId: editingGroup.courtId }
+      : { name: "", coachId: "", memberIds: [], schedule: "", courtId: "" },
   });
 
   function handleFormSubmit(values: GroupFormValues) {
@@ -73,24 +75,24 @@ export default function GroupFormDialog({
             <FormField control={form.control} name="schedule" render={({ field }) => (
               <FormItem><FormLabel>Schedule</FormLabel><FormControl><Input placeholder="e.g. Mon & Wed 9:00–10:30" {...field} /></FormControl><FormMessage /></FormItem>
             )} />
-            <FormField control={form.control} name="traineeIds" render={({ field }) => (
+            <FormField control={form.control} name="memberIds" render={({ field }) => (
               <FormItem>
                 <FormLabel>Members</FormLabel>
                 <div className="space-y-2 max-h-40 overflow-y-auto border rounded-md p-3">
-                  {trainees.map((t) => (
-                    <label key={t.id} className="flex items-center gap-2 text-sm">
-                      <Checkbox
-                        checked={field.value.includes(t.id)}
-                        onCheckedChange={(checked) => {
-                          field.onChange(
-                            checked
-                              ? [...field.value, t.id]
-                              : field.value.filter((id: string) => id !== t.id)
-                          );
-                        }}
-                      />
-                      {t.name}
-                    </label>
+                  {members.map((m) => (
+                    <MemberCheckboxItem
+                      key={m.id}
+                      id={m.id}
+                      name={m.name}
+                      checked={field.value.includes(m.id)}
+                      onChange={(checked) => {
+                        field.onChange(
+                          checked
+                            ? [...field.value, m.id]
+                            : field.value.filter((id) => id !== m.id)
+                        );
+                      }}
+                    />
                   ))}
                 </div>
                 <FormMessage />
@@ -104,5 +106,21 @@ export default function GroupFormDialog({
         </Form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+interface MemberCheckboxItemProps {
+  id: string;
+  name: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}
+
+function MemberCheckboxItem({ id, name, checked, onChange }: MemberCheckboxItemProps) {
+  return (
+    <label className="flex items-center gap-2 text-sm">
+      <Checkbox checked={checked} onCheckedChange={(c) => onChange(c === true)} />
+      {name}
+    </label>
   );
 }
