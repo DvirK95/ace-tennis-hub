@@ -53,7 +53,8 @@ export default function PersonFormDialog({
         specializations: "", hourlyRate: undefined,
       });
     }
-  }, [editingPerson, form]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingPerson]);
 
   function handleFormSubmit(values: ClubUserFormValues) {
     onSubmit(values);

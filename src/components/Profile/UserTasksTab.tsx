@@ -94,7 +94,8 @@ function TaskForm({ userId, editingTask, onSubmit, onCancel }: TaskFormProps) {
     } else {
       form.reset({ userId, taskText: "", startDate: "", endDate: "" });
     }
-  }, [editingTask, userId, form]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingTask, userId]);
 
   function handleFormSubmit(values: TaskFormValues) {
     onSubmit(values);
