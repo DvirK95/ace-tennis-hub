@@ -1,13 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import {
-  LayoutDashboard,
-  Landmark,
-  Users,
-  GraduationCap,
-  UsersRound,
-  CalendarCheck,
-  ShieldCheck,
-  ClipboardList,
+  LayoutDashboard, Landmark, Users, UsersRound,
+  CalendarDays, ShieldCheck, ClipboardList,
 } from "lucide-react";
 import { usePermissions } from "@/hooks/usePermissions";
 
@@ -52,23 +46,16 @@ export default function AppLayout() {
           {canAccess("MANAGE_COURTS") && (
             <SidebarNavItem to="/courts" icon={<Landmark className="h-4 w-4" />} label="Courts" />
           )}
-          {canAccess("MANAGE_USERS") && (
-            <SidebarNavItem to="/trainees" icon={<Users className="h-4 w-4" />} label="Trainees" />
-          )}
-          {canAccess("MANAGE_COACHES") && (
-            <SidebarNavItem to="/coaches" icon={<GraduationCap className="h-4 w-4" />} label="Coaches" />
-          )}
+          <SidebarNavItem to="/people" icon={<Users className="h-4 w-4" />} label="People" />
           {canAccess("MANAGE_GROUPS") && (
             <SidebarNavItem to="/groups" icon={<UsersRound className="h-4 w-4" />} label="Groups" />
           )}
-          {canAccess("CREATE_BOOKING") && (
-            <SidebarNavItem to="/bookings" icon={<CalendarCheck className="h-4 w-4" />} label="Bookings" />
-          )}
+          <SidebarNavItem to="/calendar" icon={<CalendarDays className="h-4 w-4" />} label="Calendar" />
           {canAccess("APPROVE_BOOKINGS") && (
             <SidebarNavItem to="/approvals" icon={<ClipboardList className="h-4 w-4" />} label="Approvals" />
           )}
           {canAccess("MANAGE_USERS") && (
-            <SidebarNavItem to="/users" icon={<ShieldCheck className="h-4 w-4" />} label="Users & Permissions" />
+            <SidebarNavItem to="/permissions" icon={<ShieldCheck className="h-4 w-4" />} label="Permissions" />
           )}
         </nav>
       </aside>
