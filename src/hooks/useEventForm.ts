@@ -67,7 +67,8 @@ export function useEventForm({ selectedSlot, editingEvent, onClose }: UseEventFo
         recurrence: "NONE",
       });
     }
-  }, [editingEvent, selectedSlot, form]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingEvent, selectedSlot]);
 
   function handleSubmit(values: EventFormValues) {
     const isAdmin = canAccess("APPROVE_BOOKINGS");
