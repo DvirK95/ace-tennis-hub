@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { eventFormSchema, type EventFormValues, type CalendarEvent } from "@/types/schemas";
@@ -17,11 +17,12 @@ interface UseEventFormParams {
 
 export function useEventForm({ selectedSlot, editingEvent, onClose }: UseEventFormParams) {
   const { addEvent, updateEvent } = useEventStore();
-  const courts = useCourtStore((s) => s.courts.filter((c) => c.status === "Active"));
+  const allCourts = useCourtStore((s) => s.courts);
   const people = usePersonStore((s) => s.people);
   const groups = useGroupStore((s) => s.groups);
   const { canAccess } = usePermissions();
-  const timeSlots = generateTimeSlots();
+  const courts = useMemo(() => allCourts.filter((c) => c.status === "Active"), [allCourts]);
+  const timeSlots = useMemo(() => generateTimeSlots(), []);
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
