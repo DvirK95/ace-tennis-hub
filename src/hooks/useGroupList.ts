@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -7,11 +7,11 @@ import {
   getPaginationRowModel,
   createColumnHelper,
   type SortingState,
-} from "@tanstack/react-table";
-import { useGroupStore } from "@/stores/useGroupStore";
-import { usePersonStore } from "@/stores/usePersonStore";
-import { useCourtStore } from "@/stores/useCourtStore";
-import type { Group, GroupFormValues } from "@/types/schemas";
+} from '@tanstack/react-table';
+import { useGroupStore } from '@/stores/useGroupStore';
+import { usePersonStore } from '@/stores/usePersonStore';
+import { useCourtStore } from '@/stores/useCourtStore';
+import type { Group, GroupFormValues } from '@/types/schemas';
 
 const columnHelper = createColumnHelper<Group>();
 
@@ -20,30 +20,30 @@ export function useGroupList() {
   const people = usePersonStore((s) => s.people);
   const { courts } = useCourtStore();
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState('');
   const [editingGroup, setEditingGroup] = useState<Group | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const coaches = useMemo(() => people.filter((p) => p.roles.includes("COACH")), [people]);
+  const coaches = useMemo(() => people.filter((p) => p.roles.includes('COACH')), [people]);
   const coachMap = useMemo(() => new Map(coaches.map((c) => [c.id, c.name])), [coaches]);
   const courtMap = useMemo(() => new Map(courts.map((c) => [c.id, c.name])), [courts]);
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("name", { header: "Group Name", enableSorting: true }),
-      columnHelper.accessor("coachId", {
-        header: "Coach",
-        cell: (info) => coachMap.get(info.getValue()) ?? "—",
+      columnHelper.accessor('name', { header: 'Group Name', enableSorting: true }),
+      columnHelper.accessor('coachId', {
+        header: 'Coach',
+        cell: (info) => coachMap.get(info.getValue()) ?? '—',
       }),
-      columnHelper.accessor("memberIds", {
-        header: "Members",
+      columnHelper.accessor('memberIds', {
+        header: 'Members',
         cell: (info) => info.getValue().length,
         enableSorting: false,
       }),
-      columnHelper.accessor("schedule", { header: "Schedule" }),
-      columnHelper.accessor("courtId", {
-        header: "Court",
-        cell: (info) => courtMap.get(info.getValue()) ?? "—",
+      columnHelper.accessor('schedule', { header: 'Schedule' }),
+      columnHelper.accessor('courtId', {
+        header: 'Court',
+        cell: (info) => courtMap.get(info.getValue()) ?? '—',
       }),
     ],
     [coachMap, courtMap]

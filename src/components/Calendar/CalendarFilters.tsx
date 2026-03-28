@@ -1,10 +1,14 @@
-import type { CalendarViewMode } from "@/hooks/useCalendar";
-import type { Court, ClubUser } from "@/types/schemas";
-import { Button } from "@/components/ui/button";
+import type { CalendarViewMode } from '@/hooks/useCalendar';
+import type { Court, ClubUser } from '@/types/schemas';
+import { Button } from '@/components/ui/button';
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
-import { ChevronLeft, ChevronRight, CalendarDays } from "lucide-react";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-react';
 
 interface CalendarFiltersProps {
   weekLabel: string;
@@ -22,31 +26,40 @@ interface CalendarFiltersProps {
 }
 
 export default function CalendarFilters({
-  weekLabel, viewMode, onViewModeChange,
-  selectedCourtId, onCourtChange,
-  selectedCoachId, onCoachChange,
-  courts, coaches,
-  onPrev, onNext, onToday,
+  weekLabel,
+  viewMode,
+  onViewModeChange,
+  selectedCourtId,
+  onCourtChange,
+  selectedCoachId,
+  onCoachChange,
+  courts,
+  coaches,
+  onPrev,
+  onNext,
+  onToday,
 }: CalendarFiltersProps) {
   return (
-    <div className="flex flex-wrap items-center gap-3 mb-4">
+    <div className="mb-4 flex flex-wrap items-center gap-3">
       <div className="flex items-center gap-1">
         <Button variant="outline" size="sm" onClick={onPrev}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <Button variant="outline" size="sm" onClick={onToday}>
-          <CalendarDays className="h-4 w-4 mr-1" /> Today
+          <CalendarDays className="mr-1 h-4 w-4" /> Today
         </Button>
         <Button variant="outline" size="sm" onClick={onNext}>
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
 
-      <span className="text-sm font-semibold text-foreground min-w-[180px]">{weekLabel}</span>
+      <span className="min-w-[180px] text-sm font-semibold text-foreground">{weekLabel}</span>
 
-      <div className="flex items-center gap-2 ml-auto">
+      <div className="ml-auto flex items-center gap-2">
         <Select value={viewMode} onValueChange={(v) => onViewModeChange(v as CalendarViewMode)}>
-          <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="global">Global Schedule</SelectItem>
             <SelectItem value="court">By Court</SelectItem>
@@ -54,9 +67,11 @@ export default function CalendarFilters({
           </SelectContent>
         </Select>
 
-        {viewMode === "court" && (
+        {viewMode === 'court' && (
           <Select value={selectedCourtId} onValueChange={onCourtChange}>
-            <SelectTrigger className="w-[160px]"><SelectValue placeholder="Select court" /></SelectTrigger>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Select court" />
+            </SelectTrigger>
             <SelectContent>
               {courts.map((c) => (
                 <CourtSelectItem key={c.id} id={c.id} name={c.name} />
@@ -65,9 +80,11 @@ export default function CalendarFilters({
           </Select>
         )}
 
-        {viewMode === "coach" && (
+        {viewMode === 'coach' && (
           <Select value={selectedCoachId} onValueChange={onCoachChange}>
-            <SelectTrigger className="w-[160px]"><SelectValue placeholder="Select coach" /></SelectTrigger>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Select coach" />
+            </SelectTrigger>
             <SelectContent>
               {coaches.map((c) => (
                 <CoachSelectItem key={c.id} id={c.id} name={c.name} />

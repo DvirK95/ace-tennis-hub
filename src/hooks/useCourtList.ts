@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -7,26 +7,26 @@ import {
   getPaginationRowModel,
   createColumnHelper,
   type SortingState,
-} from "@tanstack/react-table";
-import { useCourtStore } from "@/stores/useCourtStore";
-import type { Court, CourtFormValues } from "@/types/schemas";
+} from '@tanstack/react-table';
+import { useCourtStore } from '@/stores/useCourtStore';
+import type { Court, CourtFormValues } from '@/types/schemas';
 
 const columnHelper = createColumnHelper<Court>();
 
 export function useCourtList() {
   const { courts, addCourt, updateCourt, deleteCourt } = useCourtStore();
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState('');
   const [editingCourt, setEditingCourt] = useState<Court | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("name", { header: "Name", enableSorting: true }),
-      columnHelper.accessor("location", { header: "Location" }),
-      columnHelper.accessor("surfaceType", { header: "Surface" }),
-      columnHelper.accessor("status", {
-        header: "Status",
+      columnHelper.accessor('name', { header: 'Name', enableSorting: true }),
+      columnHelper.accessor('location', { header: 'Location' }),
+      columnHelper.accessor('surfaceType', { header: 'Surface' }),
+      columnHelper.accessor('status', {
+        header: 'Status',
         cell: (info) => info.getValue(),
       }),
     ],

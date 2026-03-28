@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import { usePersonStore } from "@/stores/usePersonStore";
-import { useGroupStore } from "@/stores/useGroupStore";
-import { useAttendanceStore } from "@/stores/useAttendanceStore";
-import { useTaskStore } from "@/stores/useTaskStore";
-import type { ClubUser } from "@/types/schemas";
+import { useMemo } from 'react';
+import { usePersonStore } from '@/stores/usePersonStore';
+import { useGroupStore } from '@/stores/useGroupStore';
+import { useAttendanceStore } from '@/stores/useAttendanceStore';
+import { useTaskStore } from '@/stores/useTaskStore';
+import type { ClubUser } from '@/types/schemas';
 
 export function useUserProfile(userId: string) {
   const person = usePersonStore((s) => s.people.find((p) => p.id === userId));
@@ -22,14 +22,11 @@ export function useUserProfile(userId: string) {
   );
 
   const absences = useMemo(
-    () => userAttendance.filter((r) => r.status === "Absent" || r.status === "Cancelled_Eligible"),
+    () => userAttendance.filter((r) => r.status === 'Absent' || r.status === 'Cancelled_Eligible'),
     [userAttendance]
   );
 
-  const userTasks = useMemo(
-    () => tasks.filter((t) => t.userId === userId),
-    [tasks, userId]
-  );
+  const userTasks = useMemo(() => tasks.filter((t) => t.userId === userId), [tasks, userId]);
 
   return {
     person: person as ClubUser | undefined,

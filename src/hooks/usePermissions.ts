@@ -1,8 +1,8 @@
-import { useMemo } from "react";
-import { useAuthStore } from "@/stores/useAuthStore";
-import { usePersonStore } from "@/stores/usePersonStore";
-import { useRolePermissionStore } from "@/stores/useRolePermissionStore";
-import type { Permission } from "@/types/permissions";
+import { useMemo } from 'react';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { usePersonStore } from '@/stores/usePersonStore';
+import { useRolePermissionStore } from '@/stores/useRolePermissionStore';
+import type { Permission } from '@/types/permissions';
 
 export function usePermissions() {
   const currentUserId = useAuthStore((s) => s.currentUserId);

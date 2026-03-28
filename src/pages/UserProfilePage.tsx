@@ -1,24 +1,24 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useUserProfile } from "@/hooks/useUserProfile";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import UserDetailsTab from "@/components/Profile/UserDetailsTab";
-import UserActivityTab from "@/components/Profile/UserActivityTab";
-import UserTasksTab from "@/components/Profile/UserTasksTab";
+import { useParams, useNavigate } from 'react-router-dom';
+import { useUserProfile } from '@/hooks/useUserProfile';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import UserDetailsTab from '@/components/Profile/UserDetailsTab';
+import UserActivityTab from '@/components/Profile/UserActivityTab';
+import UserTasksTab from '@/components/Profile/UserTasksTab';
 
 export default function UserProfilePage() {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
-  const { person, userGroups, absences } = useUserProfile(userId ?? "");
+  const { person, userGroups, absences } = useUserProfile(userId ?? '');
 
   if (!person) {
-    return <p className="text-muted-foreground p-8">User not found.</p>;
+    return <p className="p-8 text-muted-foreground">User not found.</p>;
   }
 
   return (
     <div>
-      <Button variant="ghost" size="sm" className="mb-4 gap-1" onClick={() => navigate("/people")}>
+      <Button variant="ghost" size="sm" className="mb-4 gap-1" onClick={() => navigate('/people')}>
         <ArrowLeft className="h-4 w-4" /> Back to People
       </Button>
       <div className="mb-6">

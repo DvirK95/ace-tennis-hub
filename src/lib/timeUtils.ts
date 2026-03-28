@@ -3,14 +3,14 @@ export function generateTimeSlots(): string[] {
   for (let h = 6; h <= 22; h++) {
     for (let m = 0; m < 60; m += 5) {
       if (h === 22 && m > 0) break;
-      slots.push(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
+      slots.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
     }
   }
   return slots;
 }
 
 export function timeToMinutes(time: string): number {
-  const [h, m] = time.split(":").map(Number);
+  const [h, m] = time.split(':').map(Number);
   return h * 60 + m;
 }
 
@@ -32,16 +32,19 @@ export function getWeekDays(weekStart: Date): Date[] {
 }
 
 export function formatDate(date: Date): string {
-  return date.toISOString().split("T")[0];
+  return date.toISOString().split('T')[0];
 }
 
 export function formatDayLabel(date: Date): string {
-  return date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 }
 
 const HOUR_START = 6;
 const HOUR_END = 22;
-export const CALENDAR_HOURS = Array.from({ length: HOUR_END - HOUR_START }, (_, i) => HOUR_START + i);
+export const CALENDAR_HOURS = Array.from(
+  { length: HOUR_END - HOUR_START },
+  (_, i) => HOUR_START + i
+);
 export const HOUR_HEIGHT_PX = 60;
 
 export function eventTopPx(startTime: string): number {

@@ -1,6 +1,6 @@
-import { useRolePermissionStore } from "@/stores/useRolePermissionStore";
-import { PERMISSIONS, type Permission } from "@/types/permissions";
-import { USER_ROLES, type UserRole } from "@/types/schemas";
+import { useRolePermissionStore } from '@/stores/useRolePermissionStore';
+import { PERMISSIONS, type Permission } from '@/types/permissions';
+import { USER_ROLES, type UserRole } from '@/types/schemas';
 
 export function usePermissionsMatrix() {
   const { rolePermissions, toggleRolePermission } = useRolePermissionStore();

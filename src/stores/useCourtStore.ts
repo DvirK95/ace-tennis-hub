@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import type { Court } from "@/types/schemas";
+import { create } from 'zustand';
+import type { Court } from '@/types/schemas';
 
 interface CourtState {
   courts: Court[];
@@ -9,9 +9,27 @@ interface CourtState {
 }
 
 const SEED_COURTS: Court[] = [
-  { id: "c1000000-0000-0000-0000-000000000001", name: "Center Court", location: "Main Building, Floor 1", surfaceType: "Hard", status: "Active" },
-  { id: "c1000000-0000-0000-0000-000000000002", name: "Court 2", location: "Outdoor East Wing", surfaceType: "Clay", status: "Active" },
-  { id: "c1000000-0000-0000-0000-000000000003", name: "Court 3", location: "Outdoor West Wing", surfaceType: "Grass", status: "Maintenance" },
+  {
+    id: 'c1000000-0000-0000-0000-000000000001',
+    name: 'Center Court',
+    location: 'Main Building, Floor 1',
+    surfaceType: 'Hard',
+    status: 'Active',
+  },
+  {
+    id: 'c1000000-0000-0000-0000-000000000002',
+    name: 'Court 2',
+    location: 'Outdoor East Wing',
+    surfaceType: 'Clay',
+    status: 'Active',
+  },
+  {
+    id: 'c1000000-0000-0000-0000-000000000003',
+    name: 'Court 3',
+    location: 'Outdoor West Wing',
+    surfaceType: 'Grass',
+    status: 'Maintenance',
+  },
 ];
 
 export const useCourtStore = create<CourtState>((set) => ({

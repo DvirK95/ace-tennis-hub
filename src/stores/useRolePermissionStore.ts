@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import type { Permission } from "@/types/permissions";
-import type { UserRole } from "@/types/schemas";
+import { create } from 'zustand';
+import type { Permission } from '@/types/permissions';
+import type { UserRole } from '@/types/schemas';
 
 type RolePermissionMap = Record<UserRole, Permission[]>;
 
@@ -11,24 +11,16 @@ interface RolePermissionState {
 
 const DEFAULT_MAP: RolePermissionMap = {
   ADMIN: [
-    "MANAGE_COURTS",
-    "MANAGE_USERS",
-    "MANAGE_CALENDAR",
-    "MANAGE_GROUPS",
-    "APPROVE_BOOKINGS",
-    "CREATE_BOOKING",
-    "VIEW_ALL_SCHEDULES",
+    'MANAGE_COURTS',
+    'MANAGE_USERS',
+    'MANAGE_CALENDAR',
+    'MANAGE_GROUPS',
+    'APPROVE_BOOKINGS',
+    'CREATE_BOOKING',
+    'VIEW_ALL_SCHEDULES',
   ],
-  COACH: [
-    "MANAGE_GROUPS",
-    "VIEW_ALL_SCHEDULES",
-    "CREATE_BOOKING",
-    "APPROVE_BOOKINGS",
-  ],
-  TRAINEE: [
-    "CREATE_BOOKING",
-    "VIEW_ALL_SCHEDULES",
-  ],
+  COACH: ['MANAGE_GROUPS', 'VIEW_ALL_SCHEDULES', 'CREATE_BOOKING', 'APPROVE_BOOKINGS'],
+  TRAINEE: ['CREATE_BOOKING', 'VIEW_ALL_SCHEDULES'],
 };
 
 export const useRolePermissionStore = create<RolePermissionState>((set) => ({

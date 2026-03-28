@@ -1,9 +1,14 @@
-import { create } from "zustand";
-import type { AttendanceRecord, AttendanceStatus } from "@/types/schemas";
+import { create } from 'zustand';
+import type { AttendanceRecord, AttendanceStatus } from '@/types/schemas';
 
 interface AttendanceState {
   records: AttendanceRecord[];
-  setAttendance: (groupId: string, sessionDate: string, userId: string, status: AttendanceStatus) => void;
+  setAttendance: (
+    groupId: string,
+    sessionDate: string,
+    userId: string,
+    status: AttendanceStatus
+  ) => void;
   getRecords: (groupId: string, sessionDate: string) => AttendanceRecord[];
 }
 
@@ -20,10 +25,7 @@ export const useAttendanceStore = create<AttendanceState>((set, get) => ({
         };
       }
       return {
-        records: [
-          ...s.records,
-          { id: crypto.randomUUID(), groupId, sessionDate, userId, status },
-        ],
+        records: [...s.records, { id: crypto.randomUUID(), groupId, sessionDate, userId, status }],
       };
     }),
   getRecords: (groupId, sessionDate) =>

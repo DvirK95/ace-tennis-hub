@@ -1,19 +1,29 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { taskFormSchema, type TaskFormValues, type UserTask } from "@/types/schemas";
-import { useUserTaskList } from "@/hooks/useTaskList";
-import { flexRender } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { taskFormSchema, type TaskFormValues, type UserTask } from '@/types/schemas';
+import { useUserTaskList } from '@/hooks/useTaskList';
+import { flexRender } from '@tanstack/react-table';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
-} from "@/components/ui/form";
-import { Trash2, Pencil } from "lucide-react";
-import { useEffect } from "react";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Trash2, Pencil } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface UserTasksTabProps {
   userId: string;
@@ -21,9 +31,14 @@ interface UserTasksTabProps {
 
 export default function UserTasksTab({ userId }: UserTasksTabProps) {
   const {
-    table, userTasks, editingTask,
-    handleSubmit, handleEdit, handleCancelEdit,
-    deleteTask, toggleComplete,
+    table,
+    userTasks,
+    editingTask,
+    handleSubmit,
+    handleEdit,
+    handleCancelEdit,
+    deleteTask,
+    toggleComplete,
   } = useUserTaskList(userId);
 
   return (
@@ -34,21 +49,21 @@ export default function UserTasksTab({ userId }: UserTasksTabProps) {
         onSubmit={handleSubmit}
         onCancel={handleCancelEdit}
       />
-      <div className="rounded-lg border bg-card shadow-card overflow-hidden">
+      <div className="overflow-hidden rounded-lg border bg-card shadow-card">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="text-xs uppercase font-semibold">Task</TableHead>
-              <TableHead className="text-xs uppercase font-semibold">Start</TableHead>
-              <TableHead className="text-xs uppercase font-semibold">Due</TableHead>
-              <TableHead className="text-xs uppercase font-semibold text-center">Done</TableHead>
+              <TableHead className="text-xs font-semibold uppercase">Task</TableHead>
+              <TableHead className="text-xs font-semibold uppercase">Start</TableHead>
+              <TableHead className="text-xs font-semibold uppercase">Due</TableHead>
+              <TableHead className="text-center text-xs font-semibold uppercase">Done</TableHead>
               <TableHead className="w-20" />
             </TableRow>
           </TableHeader>
           <TableBody>
             {userTasks.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
                   No tasks assigned
                 </TableCell>
               </TableRow>
@@ -80,7 +95,7 @@ interface TaskFormProps {
 function TaskForm({ userId, editingTask, onSubmit, onCancel }: TaskFormProps) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
-    defaultValues: { userId, taskText: "", startDate: "", endDate: "" },
+    defaultValues: { userId, taskText: '', startDate: '', endDate: '' },
   });
 
   useEffect(() => {
@@ -92,31 +107,68 @@ function TaskForm({ userId, editingTask, onSubmit, onCancel }: TaskFormProps) {
         endDate: editingTask.endDate,
       });
     } else {
-      form.reset({ userId, taskText: "", startDate: "", endDate: "" });
+      form.reset({ userId, taskText: '', startDate: '', endDate: '' });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingTask, userId]);
 
   function handleFormSubmit(values: TaskFormValues) {
     onSubmit(values);
-    form.reset({ userId, taskText: "", startDate: "", endDate: "" });
+    form.reset({ userId, taskText: '', startDate: '', endDate: '' });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex items-end gap-3 p-3 border rounded-lg bg-muted/30">
-        <FormField control={form.control} name="taskText" render={({ field }) => (
-          <FormItem className="flex-1"><FormLabel className="text-xs">Task</FormLabel><FormControl><Input placeholder="Task description…" {...field} /></FormControl><FormMessage /></FormItem>
-        )} />
-        <FormField control={form.control} name="startDate" render={({ field }) => (
-          <FormItem><FormLabel className="text-xs">Start</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem>
-        )} />
-        <FormField control={form.control} name="endDate" render={({ field }) => (
-          <FormItem><FormLabel className="text-xs">Due</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem>
-        )} />
-        <Button type="submit" size="sm">{editingTask ? "Update" : "Add"}</Button>
+      <form
+        onSubmit={form.handleSubmit(handleFormSubmit)}
+        className="flex items-end gap-3 rounded-lg border bg-muted/30 p-3"
+      >
+        <FormField
+          control={form.control}
+          name="taskText"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel className="text-xs">Task</FormLabel>
+              <FormControl>
+                <Input placeholder="Task description…" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="startDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-xs">Start</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="endDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-xs">Due</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" size="sm">
+          {editingTask ? 'Update' : 'Add'}
+        </Button>
         {editingTask && (
-          <Button type="button" variant="outline" size="sm" onClick={onCancel}>Cancel</Button>
+          <Button type="button" variant="outline" size="sm" onClick={onCancel}>
+            Cancel
+          </Button>
         )}
       </form>
     </Form>
@@ -131,16 +183,16 @@ interface TaskTableRowProps {
 }
 
 function TaskTableRow({ task, onToggle, onEdit, onDelete }: TaskTableRowProps) {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split('T')[0];
   const overdue = task.endDate < today && !task.isComplete;
 
   return (
-    <TableRow className={overdue ? "bg-destructive/10" : ""}>
-      <TableCell className={`text-sm ${overdue ? "text-destructive font-semibold" : ""}`}>
+    <TableRow className={overdue ? 'bg-destructive/10' : ''}>
+      <TableCell className={`text-sm ${overdue ? 'font-semibold text-destructive' : ''}`}>
         {task.taskText}
       </TableCell>
       <TableCell className="text-sm">{task.startDate}</TableCell>
-      <TableCell className={`text-sm ${overdue ? "text-destructive font-semibold" : ""}`}>
+      <TableCell className={`text-sm ${overdue ? 'font-semibold text-destructive' : ''}`}>
         {task.endDate}
       </TableCell>
       <TableCell className="text-center">

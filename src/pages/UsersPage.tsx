@@ -1,5 +1,5 @@
-import PermissionsMatrix from "@/components/Permissions/PermissionsMatrix";
-import PageHeader from "@/components/Layout/PageHeader";
+import PermissionsMatrix from '@/components/Permissions/PermissionsMatrix';
+import PageHeader from '@/components/Layout/PageHeader';
 
 export default function UsersPage() {
   return (

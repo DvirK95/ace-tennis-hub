@@ -1,5 +1,5 @@
-import type { Group, AttendanceRecord, ClubUser } from "@/types/schemas";
-import { Badge } from "@/components/ui/badge";
+import type { Group, AttendanceRecord, ClubUser } from '@/types/schemas';
+import { Badge } from '@/components/ui/badge';
 
 interface UserActivityTabProps {
   person: ClubUser;
@@ -16,7 +16,7 @@ export default function UserActivityTab({ person, userGroups, absences }: UserAc
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold mb-3">Active Groups</h3>
+        <h3 className="mb-3 text-sm font-semibold">Active Groups</h3>
         {userGroups.length === 0 ? (
           <p className="text-sm text-muted-foreground">Not assigned to any groups.</p>
         ) : (
@@ -29,7 +29,7 @@ export default function UserActivityTab({ person, userGroups, absences }: UserAc
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold mb-3">Recent Absences / Cancellations</h3>
+        <h3 className="mb-3 text-sm font-semibold">Recent Absences / Cancellations</h3>
         {absences.length === 0 ? (
           <p className="text-sm text-muted-foreground">No absences recorded.</p>
         ) : (
@@ -46,16 +46,16 @@ export default function UserActivityTab({ person, userGroups, absences }: UserAc
 
 function StatBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-muted/50 rounded-lg p-4 text-center">
+    <div className="rounded-lg bg-muted/50 p-4 text-center">
       <p className="text-2xl font-bold">{value}</p>
-      <p className="text-xs text-muted-foreground font-medium">{label}</p>
+      <p className="text-xs font-medium text-muted-foreground">{label}</p>
     </div>
   );
 }
 
 function GroupCard({ group }: { group: Group }) {
   return (
-    <div className="flex items-center justify-between p-3 border rounded-lg">
+    <div className="flex items-center justify-between rounded-lg border p-3">
       <span className="text-sm font-medium">{group.name}</span>
       <Badge variant="outline">{group.schedule}</Badge>
     </div>
@@ -64,10 +64,10 @@ function GroupCard({ group }: { group: Group }) {
 
 function AbsenceRow({ record }: { record: AttendanceRecord }) {
   return (
-    <div className="flex items-center justify-between py-1.5 border-b last:border-0 text-sm">
+    <div className="flex items-center justify-between border-b py-1.5 text-sm last:border-0">
       <span>{record.sessionDate}</span>
-      <Badge variant={record.status === "Cancelled_Eligible" ? "secondary" : "destructive"}>
-        {record.status.replace("_", " ")}
+      <Badge variant={record.status === 'Cancelled_Eligible' ? 'secondary' : 'destructive'}>
+        {record.status.replace('_', ' ')}
       </Badge>
     </div>
   );

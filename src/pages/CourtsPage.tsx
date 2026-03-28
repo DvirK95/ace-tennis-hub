@@ -1,17 +1,24 @@
-import { useCourtList } from "@/hooks/useCourtList";
-import DataTable from "@/components/DataTable";
-import CourtFormDialog from "@/components/Courts/CourtFormDialog";
-import PageHeader from "@/components/Layout/PageHeader";
-import StatusBadge from "@/components/StatusBadge";
-import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2 } from "lucide-react";
-import type { Court } from "@/types/schemas";
+import { useCourtList } from '@/hooks/useCourtList';
+import DataTable from '@/components/DataTable';
+import CourtFormDialog from '@/components/Courts/CourtFormDialog';
+import PageHeader from '@/components/Layout/PageHeader';
+import StatusBadge from '@/components/StatusBadge';
+import { Button } from '@/components/ui/button';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
+import type { Court } from '@/types/schemas';
 
 export default function CourtsPage() {
   const {
-    table, globalFilter, setGlobalFilter,
-    isFormOpen, setIsFormOpen, editingCourt,
-    openCreate, openEdit, handleSubmit, handleDelete,
+    table,
+    globalFilter,
+    setGlobalFilter,
+    isFormOpen,
+    setIsFormOpen,
+    editingCourt,
+    openCreate,
+    openEdit,
+    handleSubmit,
+    handleDelete,
   } = useCourtList();
 
   return (
@@ -19,7 +26,12 @@ export default function CourtsPage() {
       <PageHeader
         title="Courts"
         description="Manage your tennis courts"
-        action={<Button onClick={openCreate}><Plus className="h-4 w-4 mr-2" />Add Court</Button>}
+        action={
+          <Button onClick={openCreate}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Court
+          </Button>
+        }
       />
       <DataTable
         table={table}

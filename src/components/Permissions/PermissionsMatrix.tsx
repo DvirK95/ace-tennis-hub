@@ -1,20 +1,25 @@
-import { usePermissionsMatrix } from "@/hooks/usePermissionsMatrix";
-import { PERMISSION_LABELS, type Permission } from "@/types/permissions";
-import type { UserRole } from "@/types/schemas";
-import { Checkbox } from "@/components/ui/checkbox";
+import { usePermissionsMatrix } from '@/hooks/usePermissionsMatrix';
+import { PERMISSION_LABELS, type Permission } from '@/types/permissions';
+import type { UserRole } from '@/types/schemas';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 export default function PermissionsMatrix() {
   const { roles, permissions, hasPermission, toggleRolePermission } = usePermissionsMatrix();
 
   return (
-    <div className="rounded-lg border bg-card shadow-card overflow-auto animate-fade-in">
+    <div className="animate-fade-in overflow-auto rounded-lg border bg-card shadow-card">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">
-            <TableHead className="font-semibold text-xs uppercase tracking-wider">Role</TableHead>
+            <TableHead className="text-xs font-semibold uppercase tracking-wider">Role</TableHead>
             {permissions.map((perm) => (
               <PermissionColumnHeader key={perm} permission={perm} />
             ))}
@@ -42,7 +47,7 @@ interface PermissionColumnHeaderProps {
 
 function PermissionColumnHeader({ permission }: PermissionColumnHeaderProps) {
   return (
-    <TableHead className="text-center font-semibold text-[10px] uppercase tracking-wider min-w-[100px]">
+    <TableHead className="min-w-[100px] text-center text-[10px] font-semibold uppercase tracking-wider">
       {PERMISSION_LABELS[permission]}
     </TableHead>
   );
@@ -58,7 +63,7 @@ interface RolePermissionRowProps {
 function RolePermissionRow({ role, permissions, hasPermission, onToggle }: RolePermissionRowProps) {
   return (
     <TableRow>
-      <TableCell className="font-medium text-sm">{role}</TableCell>
+      <TableCell className="text-sm font-medium">{role}</TableCell>
       {permissions.map((perm) => (
         <PermissionCheckboxCell
           key={perm}

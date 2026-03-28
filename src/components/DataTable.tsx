@@ -1,4 +1,4 @@
-import { flexRender, type Table as TanstackTable } from "@tanstack/react-table";
+import { flexRender, type Table as TanstackTable } from '@tanstack/react-table';
 import {
   Table,
   TableBody,
@@ -6,10 +6,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 
 interface DataTableProps<T> {
   table: TanstackTable<T>;
@@ -27,9 +27,9 @@ export default function DataTable<T>({
   actionColumn,
 }: DataTableProps<T>) {
   return (
-    <div className="space-y-4 animate-fade-in">
+    <div className="animate-fade-in space-y-4">
       <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="Search…"
           value={globalFilter}
@@ -37,7 +37,7 @@ export default function DataTable<T>({
           className="pl-9"
         />
       </div>
-      <div className="rounded-lg border bg-card shadow-card overflow-hidden">
+      <div className="overflow-hidden rounded-lg border bg-card shadow-card">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((hg) => (
@@ -45,11 +45,15 @@ export default function DataTable<T>({
                 {hg.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="font-semibold text-xs uppercase tracking-wider text-muted-foreground cursor-pointer select-none"
+                    className="cursor-pointer select-none text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                     onClick={header.column.getToggleSortingHandler()}
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
-                    {header.column.getIsSorted() === "asc" ? " ↑" : header.column.getIsSorted() === "desc" ? " ↓" : ""}
+                    {header.column.getIsSorted() === 'asc'
+                      ? ' ↑'
+                      : header.column.getIsSorted() === 'desc'
+                        ? ' ↓'
+                        : ''}
                   </TableHead>
                 ))}
                 {actionColumn && <TableHead className="w-24" />}
@@ -59,7 +63,10 @@ export default function DataTable<T>({
           <TableBody>
             {table.getRowModel().rows.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={table.getAllColumns().length + (actionColumn ? 1 : 0)} className="text-center py-8 text-muted-foreground">
+                <TableCell
+                  colSpan={table.getAllColumns().length + (actionColumn ? 1 : 0)}
+                  className="py-8 text-center text-muted-foreground"
+                >
                   No records found
                 </TableCell>
               </TableRow>
@@ -67,7 +74,7 @@ export default function DataTable<T>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className={onRowClick ? "cursor-pointer hover:bg-muted/50 transition-colors" : ""}
+                  className={onRowClick ? 'cursor-pointer transition-colors hover:bg-muted/50' : ''}
                   onClick={() => onRowClick?.(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -88,8 +95,7 @@ export default function DataTable<T>({
       </div>
       <div className="flex items-center justify-between">
         <span className="text-sm text-muted-foreground">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount() || 1}
+          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount() || 1}
         </span>
         <div className="flex gap-2">
           <Button

@@ -1,12 +1,10 @@
-import { useAttendance } from "@/hooks/useAttendance";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import StatusBadge from "@/components/StatusBadge";
-import type { AttendanceStatus } from "@/types/schemas";
+import { useAttendance } from '@/hooks/useAttendance';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import StatusBadge from '@/components/StatusBadge';
+import type { AttendanceStatus } from '@/types/schemas';
 
 interface AttendancePanelProps {
   groupId: string;
@@ -23,23 +21,23 @@ interface AttendanceRowProps {
 
 function AttendanceRow({ userId, userName, status, onMark }: AttendanceRowProps) {
   return (
-    <div className="flex items-center justify-between py-2 border-b last:border-0">
+    <div className="flex items-center justify-between border-b py-2 last:border-0">
       <span className="text-sm font-medium">{userName}</span>
       <div className="flex items-center gap-3">
         {status && <StatusBadge status={status} />}
         <label className="flex items-center gap-1.5 text-xs">
           <Checkbox
-            checked={status === "Present"}
-            onCheckedChange={() => onMark(userId, "Present")}
+            checked={status === 'Present'}
+            onCheckedChange={() => onMark(userId, 'Present')}
           />
           Present
         </label>
         <Button
           variant="outline"
           size="sm"
-          className="text-xs h-7"
-          onClick={() => onMark(userId, "Cancelled_Eligible")}
-          disabled={status === "Cancelled_Eligible"}
+          className="h-7 text-xs"
+          onClick={() => onMark(userId, 'Cancelled_Eligible')}
+          disabled={status === 'Cancelled_Eligible'}
         >
           Cancel (+ Credit)
         </Button>
@@ -61,10 +59,15 @@ export default function AttendancePanel({ groupId, open, onOpenChange }: Attenda
           <DialogTitle>Attendance — {group.name}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <Input type="date" value={sessionDate} onChange={(e) => setSessionDate(e.target.value)} className="max-w-48" />
+          <Input
+            type="date"
+            value={sessionDate}
+            onChange={(e) => setSessionDate(e.target.value)}
+            className="max-w-48"
+          />
           <div>
             {groupMembers.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4">No members in this group.</p>
+              <p className="py-4 text-sm text-muted-foreground">No members in this group.</p>
             ) : (
               groupMembers.map((m) => (
                 <AttendanceRow

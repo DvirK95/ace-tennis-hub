@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import type { Group } from "@/types/schemas";
+import { create } from 'zustand';
+import type { Group } from '@/types/schemas';
 
 interface GroupState {
   groups: Group[];
@@ -10,15 +10,12 @@ interface GroupState {
 
 const SEED: Group[] = [
   {
-    id: "g1000000-0000-0000-0000-000000000001",
-    name: "Beginner Mondays",
-    coachId: "co100000-0000-0000-0000-000000000002",
-    memberIds: [
-      "t1000000-0000-0000-0000-000000000001",
-      "t1000000-0000-0000-0000-000000000003",
-    ],
-    schedule: "Mon & Wed 9:00–10:30",
-    courtId: "c1000000-0000-0000-0000-000000000001",
+    id: 'g1000000-0000-0000-0000-000000000001',
+    name: 'Beginner Mondays',
+    coachId: 'co100000-0000-0000-0000-000000000002',
+    memberIds: ['t1000000-0000-0000-0000-000000000001', 't1000000-0000-0000-0000-000000000003'],
+    schedule: 'Mon & Wed 9:00–10:30',
+    courtId: 'c1000000-0000-0000-0000-000000000001',
   },
 ];
 
