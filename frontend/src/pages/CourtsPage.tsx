@@ -2,8 +2,7 @@ import { useCourtList } from '@/hooks/useCourtList';
 import DataTable from '@/components/DataTable';
 import CourtFormDialog from '@/components/Courts/CourtFormDialog';
 import PageHeader from '@/components/Layout/PageHeader';
-import StatusBadge from '@/components/StatusBadge';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import type { Court } from '@/types/schemas';
 

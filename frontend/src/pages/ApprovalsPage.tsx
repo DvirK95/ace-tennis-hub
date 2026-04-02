@@ -3,7 +3,7 @@ import { useEventStore } from '@/stores/useEventStore';
 import { useCourtStore } from '@/stores/useCourtStore';
 import PageHeader from '@/components/Layout/PageHeader';
 import StatusBadge from '@/components/StatusBadge';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Check, X } from 'lucide-react';
 import type { CalendarEvent } from '@/types/schemas';
 

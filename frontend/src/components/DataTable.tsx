@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 

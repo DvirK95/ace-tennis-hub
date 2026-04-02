@@ -9,7 +9,7 @@ import {
 } from '@/types/schemas';
 import { usePersonStore } from '@/stores/usePersonStore';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -198,7 +198,7 @@ interface MemberCheckboxItemProps {
   onChange: (checked: boolean) => void;
 }
 
-function MemberCheckboxItem({ id, name, checked, onChange }: MemberCheckboxItemProps) {
+function MemberCheckboxItem({ name, checked, onChange }: MemberCheckboxItemProps) {
   return (
     <label className="flex items-center gap-2 text-sm">
       <Checkbox checked={checked} onCheckedChange={(c) => onChange(c === true)} />

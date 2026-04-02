@@ -1,6 +1,6 @@
 import { useAttendance } from '@/hooks/useAttendance';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import StatusBadge from '@/components/StatusBadge';

@@ -14,7 +14,7 @@ import type { UserTask, TaskFormValues } from '@/types/schemas';
 const columnHelper = createColumnHelper<UserTask & { userName: string }>();
 
 export function useGlobalTaskList() {
-  const { tasks, addTask, toggleComplete } = useTaskStore();
+  const { tasks, toggleComplete } = useTaskStore();
   const people = usePersonStore((s) => s.people);
   const [sorting, setSorting] = useState<SortingState>([{ id: 'endDate', desc: false }]);
 

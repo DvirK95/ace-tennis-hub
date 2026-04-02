@@ -1,14 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
-import {
-  LayoutDashboard,
-  Landmark,
-  Users,
-  UsersRound,
-  CalendarDays,
-  ShieldCheck,
-  ClipboardList,
-} from 'lucide-react';
-import { usePermissions } from '@/hooks/usePermissions';
+import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 function AppLayout() {

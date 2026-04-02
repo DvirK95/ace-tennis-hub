@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { ArrowLeft } from 'lucide-react';
 import UserDetailsTab from '@/components/Profile/UserDetailsTab';
 import UserActivityTab from '@/components/Profile/UserActivityTab';

@@ -2,7 +2,7 @@ import { usePeopleList } from '@/hooks/usePeopleList';
 import DataTable from '@/components/DataTable';
 import PersonFormDialog from '@/components/People/PersonFormDialog';
 import PageHeader from '@/components/Layout/PageHeader';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import {
   Select,

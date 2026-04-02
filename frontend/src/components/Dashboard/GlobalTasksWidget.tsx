@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function GlobalTasksWidget() {

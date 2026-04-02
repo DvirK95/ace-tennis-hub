@@ -1,6 +1,6 @@
 import type { CalendarViewMode } from '@/hooks/useCalendar';
 import type { Court, ClubUser } from '@/types/schemas';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import {
   Select,
   SelectContent,

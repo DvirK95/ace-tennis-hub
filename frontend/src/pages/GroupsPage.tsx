@@ -4,7 +4,7 @@ import DataTable from '@/components/DataTable';
 import GroupFormDialog from '@/components/Groups/GroupFormDialog';
 import AttendancePanel from '@/components/Groups/AttendancePanel';
 import PageHeader from '@/components/Layout/PageHeader';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Plus, Pencil, Trash2, ClipboardList } from 'lucide-react';
 import type { Group } from '@/types/schemas';
 

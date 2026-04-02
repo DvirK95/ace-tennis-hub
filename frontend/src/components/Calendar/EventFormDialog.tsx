@@ -1,7 +1,7 @@
 import { useEventForm } from '@/hooks/useEventForm';
 import type { CalendarEvent } from '@/types/schemas';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import {

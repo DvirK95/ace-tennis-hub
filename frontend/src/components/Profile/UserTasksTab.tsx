@@ -2,9 +2,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { taskFormSchema, type TaskFormValues, type UserTask } from '@/types/schemas';
 import { useUserTaskList } from '@/hooks/useTaskList';
-import { flexRender } from '@tanstack/react-table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/input';
 import {
   Table,
@@ -31,7 +30,6 @@ interface UserTasksTabProps {
 
 export default function UserTasksTab({ userId }: UserTasksTabProps) {
   const {
-    table,
     userTasks,
     editingTask,
     handleSubmit,

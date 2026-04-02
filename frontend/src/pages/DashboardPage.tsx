@@ -2,7 +2,7 @@ import { useCourtStore } from '@/stores/useCourtStore';
 import { usePersonStore } from '@/stores/usePersonStore';
 import { useEventStore } from '@/stores/useEventStore';
 import { useGroupStore } from '@/stores/useGroupStore';
-import { Landmark, Users, CalendarCheck, UsersRound, AlertCircle, ListTodo } from 'lucide-react';
+import { Landmark, Users, CalendarCheck, UsersRound, AlertCircle } from 'lucide-react';
 import PageHeader from '@/components/Layout/PageHeader';
 import GlobalTasksWidget from '@/components/Dashboard/GlobalTasksWidget';
 
@@ -33,8 +33,6 @@ export default function DashboardPage() {
   const events = useEventStore((s) => s.events);
   const groups = useGroupStore((s) => s.groups);
 
-  const coaches = people.filter((p) => p.roles.includes('COACH')).length;
-  const trainees = people.filter((p) => p.roles.includes('TRAINEE')).length;
   const pending = events.filter((e) => e.status === 'PENDING_APPROVAL').length;
 
   return (
