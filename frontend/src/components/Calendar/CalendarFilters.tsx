@@ -42,15 +42,23 @@ export default function CalendarFilters({
   return (
     <div className="mb-4 flex flex-wrap items-center gap-3">
       <div className="flex items-center gap-1">
-        <Button variant="outline" size="sm" onClick={onPrev}>
-          <ChevronLeft className="h-4 w-4" />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onPrev}
+          icon={<ChevronLeft className="h-4 w-4" />}
+          aria-label="Previous week"
+        />
+        <Button variant="outline" size="sm" onClick={onToday} icon={<CalendarDays className="h-4 w-4" />}>
+          Today
         </Button>
-        <Button variant="outline" size="sm" onClick={onToday}>
-          <CalendarDays className="mr-1 h-4 w-4" /> Today
-        </Button>
-        <Button variant="outline" size="sm" onClick={onNext}>
-          <ChevronRight className="h-4 w-4" />
-        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onNext}
+          icon={<ChevronRight className="h-4 w-4" />}
+          aria-label="Next week"
+        />
       </div>
 
       <span className="min-w-[180px] text-sm font-semibold text-foreground">{weekLabel}</span>

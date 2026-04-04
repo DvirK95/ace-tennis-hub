@@ -26,8 +26,7 @@ export default function CourtsPage() {
         title="Courts"
         description="Manage your tennis courts"
         action={
-          <Button onClick={openCreate}>
-            <Plus className="mr-2 h-4 w-4" />
+          <Button onClick={openCreate} icon={<Plus className="h-4 w-4" />}>
             Add Court
           </Button>
         }
@@ -39,12 +38,20 @@ export default function CourtsPage() {
         onRowClick={openEdit}
         actionColumn={(court: Court) => (
           <div className="flex gap-1">
-            <Button variant="ghost" size="sm" onClick={() => openEdit(court)}>
-              <Pencil className="h-3.5 w-3.5" />
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => handleDelete(court.id)}>
-              <Trash2 className="h-3.5 w-3.5 text-destructive" />
-            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openEdit(court)}
+              icon={<Pencil className="h-3.5 w-3.5" />}
+              aria-label="Edit court"
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDelete(court.id)}
+              icon={<Trash2 className="h-3.5 w-3.5 text-destructive" />}
+              aria-label="Delete court"
+            />
           </div>
         )}
       />

@@ -1,20 +1,45 @@
-import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
-import { type VariantProps } from 'class-variance-authority';
+import type { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react';
 
-import { cn } from '@/lib/utils';
-import { buttonVariants } from './buttonVariant';
+import { composeButtonClasses, type ButtonComposeSize } from './buttonClasses';
+import ButtonTooltipWrapper from './ButtonTooltipWrapper';
+import { hasVisibleContent } from '@/helpers/hasVisibleContent';
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+export interface ButtonProps extends Pick<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'className' | 'onClick' | 'disabled' | 'type'
+> {
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  size?: 'default' | 'sm';
+  icon?: ReactElement;
+  children?: ReactNode;
+  tooltip?: ReactElement;
 }
 
-export function Button(
-  { className, variant, size, asChild = false, ...props }: ButtonProps,
-  ref: React.Ref<HTMLButtonElement>
-) {
-  const Comp = asChild ? Slot : 'button';
-  return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+function Button(props: ButtonProps) {
+  const {
+    className,
+    variant = 'default',
+    size = 'default',
+    icon,
+    children,
+    tooltip,
+    ...rest
+  } = props;
+  const iconOnly = Boolean(icon) && !hasVisibleContent(children);
+  const composedSize: ButtonComposeSize = iconOnly ? (size === 'sm' ? 'iconSm' : 'icon') : size;
+
+  return (
+    <ButtonTooltipWrapper tooltip={tooltip}>
+      <button
+        className={composeButtonClasses({ variant, size: composedSize, className })}
+        {...rest}
+      >
+        {icon}
+        {children}
+      </button>
+    </ButtonTooltipWrapper>
+  );
 }
-Button.displayName = 'Button';
+
+export { Button };
+export default Button;

@@ -198,12 +198,20 @@ function TaskTableRow({ task, onToggle, onEdit, onDelete }: TaskTableRowProps) {
       </TableCell>
       <TableCell>
         <div className="flex gap-1">
-          <Button variant="ghost" size="sm" onClick={() => onEdit(task)}>
-            <Pencil className="h-3.5 w-3.5" />
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => onDelete(task.id)}>
-            <Trash2 className="h-3.5 w-3.5 text-destructive" />
-          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onEdit(task)}
+            icon={<Pencil className="h-3.5 w-3.5" />}
+            aria-label="Edit task"
+          />
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onDelete(task.id)}
+            icon={<Trash2 className="h-3.5 w-3.5 text-destructive" />}
+            aria-label="Delete task"
+          />
         </div>
       </TableCell>
     </TableRow>

@@ -37,8 +37,7 @@ export default function PeoplePage() {
         title="People"
         description="Manage all users — admins, coaches, and trainees"
         action={
-          <Button onClick={openCreate}>
-            <Plus className="mr-2 h-4 w-4" />
+          <Button onClick={openCreate} icon={<Plus className="h-4 w-4" />}>
             Add Person
           </Button>
         }
@@ -63,12 +62,20 @@ export default function PeoplePage() {
         onRowClick={(person: ClubUser) => navigate(`/people/${person.id}`)}
         actionColumn={(person: ClubUser) => (
           <div className="flex gap-1">
-            <Button variant="ghost" size="sm" onClick={() => openEdit(person)}>
-              <Pencil className="h-3.5 w-3.5" />
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => handleDelete(person.id)}>
-              <Trash2 className="h-3.5 w-3.5 text-destructive" />
-            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openEdit(person)}
+              icon={<Pencil className="h-3.5 w-3.5" />}
+              aria-label="Edit person"
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDelete(person.id)}
+              icon={<Trash2 className="h-3.5 w-3.5 text-destructive" />}
+              aria-label="Delete person"
+            />
           </div>
         )}
       />

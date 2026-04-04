@@ -32,8 +32,7 @@ export default function GroupsPage() {
         title="Groups & Classes"
         description="Manage training groups"
         action={
-          <Button onClick={openCreate}>
-            <Plus className="mr-2 h-4 w-4" />
+          <Button onClick={openCreate} icon={<Plus className="h-4 w-4" />}>
             Add Group
           </Button>
         }
@@ -50,15 +49,23 @@ export default function GroupsPage() {
               size="sm"
               onClick={() => setAttendanceGroupId(group.id)}
               title="Attendance"
-            >
-              <ClipboardList className="h-3.5 w-3.5" />
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => openEdit(group)}>
-              <Pencil className="h-3.5 w-3.5" />
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => handleDelete(group.id)}>
-              <Trash2 className="h-3.5 w-3.5 text-destructive" />
-            </Button>
+              icon={<ClipboardList className="h-3.5 w-3.5" />}
+              aria-label="Attendance"
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openEdit(group)}
+              icon={<Pencil className="h-3.5 w-3.5" />}
+              aria-label="Edit group"
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDelete(group.id)}
+              icon={<Trash2 className="h-3.5 w-3.5 text-destructive" />}
+              aria-label="Delete group"
+            />
           </div>
         )}
       />

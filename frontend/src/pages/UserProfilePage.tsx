@@ -18,8 +18,14 @@ export default function UserProfilePage() {
 
   return (
     <div>
-      <Button variant="ghost" size="sm" className="mb-4 gap-1" onClick={() => navigate('/people')}>
-        <ArrowLeft className="h-4 w-4" /> Back to People
+      <Button
+        variant="ghost"
+        size="sm"
+        className="mb-4 gap-1"
+        onClick={() => navigate('/people')}
+        icon={<ArrowLeft className="h-4 w-4" />}
+      >
+        Back to People
       </Button>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">{person.name}</h1>

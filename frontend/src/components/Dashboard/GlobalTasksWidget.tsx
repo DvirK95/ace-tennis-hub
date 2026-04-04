@@ -77,17 +77,17 @@ export default function GlobalTasksWidget() {
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
+            icon={<ChevronLeft className="h-4 w-4" />}
+            aria-label="Previous page"
+          />
           <Button
             variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+            icon={<ChevronRight className="h-4 w-4" />}
+            aria-label="Next page"
+          />
         </div>
       </div>
     </div>

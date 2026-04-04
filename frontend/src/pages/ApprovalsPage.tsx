@@ -28,16 +28,17 @@ function ApprovalRow({ event, courtName, onApprove, onReject }: ApprovalRowProps
         <StatusBadge status={event.status} />
       </div>
       <div className="flex gap-2">
-        <Button size="sm" onClick={() => onApprove(event.id)} className="gap-1">
-          <Check className="h-3.5 w-3.5" /> Approve
+        <Button size="sm" onClick={() => onApprove(event.id)} className="gap-1" icon={<Check className="h-3.5 w-3.5" />}>
+          Approve
         </Button>
         <Button
           size="sm"
           variant="outline"
           onClick={() => onReject(event.id)}
           className="gap-1 text-destructive"
+          icon={<X className="h-3.5 w-3.5" />}
         >
-          <X className="h-3.5 w-3.5" /> Reject
+          Reject
         </Button>
       </div>
     </div>

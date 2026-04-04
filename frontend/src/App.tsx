@@ -13,6 +13,7 @@ import ApprovalsPage from '@/pages/ApprovalsPage';
 import UsersPage from '@/pages/UsersPage';
 import UserProfilePage from '@/pages/UserProfilePage';
 import NotFound from '@/pages/NotFound';
+import LoginPage from './pages/login/Login.page';
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ export default function App() {
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/login" element={<LoginPage />} />
             <Route element={<AppLayout />}>
               <Route path="/" element={<DashboardPage />} />
               <Route path="/courts" element={<CourtsPage />} />
