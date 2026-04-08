@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "prebuild": "sh -c 'export DATABASE_URL=\"${DATABASE_URL:-postgresql://127.0.0.1:5432/prisma_generate_only}\"; export DIRECT_URL=\"${DIRECT_URL:-postgresql://127.0.0.1:5432/prisma_generate_only}\"; prisma generate'",
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma:reset": "npx prisma migrate reset",
@@ -18,7 +19,7 @@
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.5.0",
     "@prisma/adapter-pg": "^7.6.0",
-    "@prisma/client": "^7.6.0",
+    "@prisma/client": "^7.7.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -36,7 +37,7 @@
     "@types/node": "^25.5.0",
     "@types/pg": "^8.20.0",
     "@types/swagger-ui-express": "^4.1.8",
-    "prisma": "^7.6.0",
+    "prisma": "^7.7.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }
