@@ -21,9 +21,11 @@ export const UserSchema = z
 
 export const CreateUserRequestSchema = z.object({
   body: z.object({
-    fullName: z.string().min(2),
-    phone: z.string().optional(),
-    role: z.enum(['ADMIN', 'COACH', 'TRAINEE']).default('TRAINEE'),
-    makeupCredits: z.number().int().min(0).optional(),
+    ...UserSchema.pick({
+      fullName: true,
+      phone: true,
+      role: true,
+      makeupCredits: true,
+    }).shape,
   }),
 });
