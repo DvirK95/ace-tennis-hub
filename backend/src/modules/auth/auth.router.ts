@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { createModuleRouter } from '../../utils/routeBuilder';
-import { LoginRequestSchema } from './auth.schema';
+import { LoginRequestSchema, LoginResponseSchema } from './auth.schema';
 import { authController } from './auth.controller';
 
 export const authPath = '/auth';
@@ -21,8 +21,11 @@ define(
       200: {
         description: 'Login successful',
         content: {
-          'application/json': { schema: z.string() },
+          'application/json': { schema: LoginResponseSchema },
         },
+      },
+      401: {
+        description: 'Authentication failed',
       },
     },
   },
