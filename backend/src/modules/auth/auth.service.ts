@@ -1,5 +1,5 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Pool } from 'pg';
@@ -15,6 +15,7 @@ const prisma = new PrismaClient({ adapter });
 type LoginInput = z.infer<typeof LoginRequestSchema>['body'];
 
 type LoginResponse = z.infer<typeof LoginResponseSchema>;
+
 export class AuthService {
   async login(data: LoginInput): Promise<LoginResponse> {
     const user = await prisma.user.findUnique({
@@ -37,6 +38,16 @@ export class AuthService {
     );
 
     return { ...user, token } as unknown as LoginResponse;
+  }
+  async register(data: User): Promise<User> {
+    const { createdAt, updatedAt, ...rest } = data;
+    const user = await prisma.user.create({
+      data: {
+        ...rest,
+        password: await bcrypt.hash(data.password, 10),
+      },
+    });
+    return user;
   }
 }
 

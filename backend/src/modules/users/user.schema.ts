@@ -29,6 +29,6 @@ export const CreateUserRequestSchema = z.object({
       role: true,
       makeupCredits: true,
     }).shape,
-    password: z.string().min(8).openapi({ example: 'password123' }),
+    password: z.string().min(8).openapi({ example: 'aA123456' }),
   }),
 });
