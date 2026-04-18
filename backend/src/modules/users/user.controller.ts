@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthenticatedRequest } from '../../middleware/authenticate';
 import { userService } from './user.service';
 
 export class UserController {
-  async getAllUsers(req: Request, res: Response) {
+  async getAllUsers(req: AuthenticatedRequest, res: Response) {
     try {
       const users = await userService.getAllUsers();
       res.json(users);
@@ -11,7 +12,7 @@ export class UserController {
     }
   }
 
-  async createUser(req: Request, res: Response) {
+  async createUser(req: AuthenticatedRequest, res: Response) {
     try {
       const newUser = await userService.createUser(req.body);
       res.status(201).json(newUser);
