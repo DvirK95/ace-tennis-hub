@@ -2,13 +2,8 @@ import {
   OpenAPIRegistry,
   OpenApiGeneratorV3,
 } from '@asteasolutions/zod-to-openapi';
-import { UserSchema } from '../modules/users/user.schema';
-import { LoginResponseSchema } from '../modules/auth/auth.schema';
 
 export const registry = new OpenAPIRegistry();
-
-registry.register('User', UserSchema);
-registry.register('LoginResponseSchema', LoginResponseSchema);
 
 export function generateOpenApiDocument() {
   const generator = new OpenApiGeneratorV3(registry.definitions);
