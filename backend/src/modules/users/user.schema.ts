@@ -17,18 +17,16 @@ export const UserSchema = z
     createdAt: z.iso
       .datetime()
       .openapi({ example: '2026-03-28T12:00:00.000Z' }),
+    password: z.string().min(8).openapi({ example: 'aA123456' }).nullable(),
   })
   .openapi('User');
 
+export const CreateUserBodySchema = UserSchema.omit({
+  id: true,
+  createdAt: true,
+  makeupCredits: true,
+}).openapi('CreateUserRequest');
+
 export const CreateUserRequestSchema = z.object({
-  body: z.object({
-    ...UserSchema.pick({
-      fullName: true,
-      email: true,
-      phone: true,
-      role: true,
-      makeupCredits: true,
-    }).shape,
-    password: z.string().min(8).openapi({ example: 'aA123456' }),
-  }),
+  body: CreateUserBodySchema,
 });

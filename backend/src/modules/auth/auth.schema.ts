@@ -5,15 +5,17 @@ import { UserSchema } from '../users/user.schema';
 extendZodWithOpenApi(z);
 
 export const LoginRequestSchema = z.object({
-  body: z.object({
-    email: z.email(),
-    password: z.string().min(6).openapi({ example: 'password' }),
-  }),
+  body: z
+    .object({
+      email: z.email(),
+      password: z.string().min(6).openapi({ example: 'password' }),
+    })
+    .openapi('LoginRequest'),
 });
 
 export const LoginResponseSchema = z
   .object({
-    ...UserSchema.shape,
+    user: UserSchema,
     token: z.string(),
   })
-  .openapi('LoginResponseSchema');
+  .openapi('LoginResponse');
