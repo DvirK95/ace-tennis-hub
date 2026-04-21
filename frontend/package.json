@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "codegen": "orval --config orval.config.ts"
+    "codegen": "orval --config orval.config.ts && node scripts/split-generated.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
