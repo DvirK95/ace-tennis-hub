@@ -6,6 +6,7 @@ export const network = axios.create({
   baseURL,
   headers: {
     'Content-Type': 'application/json',
+    Accept: 'application/json',
   },
   withCredentials: true,
 });

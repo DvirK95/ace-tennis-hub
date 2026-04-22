@@ -11,7 +11,6 @@ export class AuthController {
         res.status(401).json({ error: 'Invalid email or password' });
         return;
       }
-
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
