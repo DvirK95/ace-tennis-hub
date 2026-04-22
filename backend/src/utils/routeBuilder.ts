@@ -31,8 +31,7 @@ function walkAndRegister(schema: unknown, seen = new WeakSet<object>()): void {
     }
   }
 
-  const shape =
-    typeof def.shape === 'function' ? def.shape() : def.shape;
+  const shape = typeof def.shape === 'function' ? def.shape() : def.shape;
   if (shape && typeof shape === 'object') {
     for (const key of Object.keys(shape)) walkAndRegister(shape[key], seen);
   }
@@ -83,6 +82,8 @@ export function createModuleRouter(basePath: string) {
         tags: config.tags,
         summary: config.summary,
         path: fullSwaggerPath,
+        security: config.security ?? [{ bearerAuth: [] }],
+
         request: config.schema?.shape?.body
           ? {
               body: {

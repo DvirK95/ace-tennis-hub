@@ -23,6 +23,20 @@ export class AuthController {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+  async getAuthenticatedUser(req: Request, res: Response) {
+    try {
+      const user = await authService.getAuthenticatedUser(
+        req.headers.authorization ?? '',
+      );
+      res.status(200).json(user);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'INVALID_TOKEN') {
+        res.status(401).json({ error: 'Authentication failed' });
+        return;
+      }
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 }
 
 export const authController = new AuthController();

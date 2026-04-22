@@ -19,3 +19,11 @@ export const LoginResponseSchema = z
     token: z.string(),
   })
   .openapi('LoginResponse');
+
+export const AuthenticatedUserSchema = z
+  .object({
+    user: UserSchema,
+    sub: z.string(),
+    permissions: z.array(z.string()),
+  })
+  .openapi('AuthenticatedUser');
