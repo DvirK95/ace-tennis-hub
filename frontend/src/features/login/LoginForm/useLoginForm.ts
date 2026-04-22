@@ -3,8 +3,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginFormSchema, type LoginFormValuesInfer } from './schema';
 import { useMutation } from '@tanstack/react-query';
 import { api } from '@/schemas/api';
+import { tokenStorage } from '@/lib/tokenStorage';
+import { useNavigate } from 'react-router-dom';
 
 export function useLoginForm() {
+  const navigate = useNavigate();
+
   const form = useForm<LoginFormValuesInfer>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -16,13 +20,15 @@ export function useLoginForm() {
   const { mutateAsync } = useMutation({
     mutationFn: api.auth.login,
   });
+
   async function handleSubmit(values: LoginFormValuesInfer) {
     try {
       const response = await mutateAsync({
         email: values.email,
         password: values.password,
       });
-      console.log(response);
+      tokenStorage.set(response.token);
+      navigate('/');
     } catch (e) {
       console.error(e);
     }

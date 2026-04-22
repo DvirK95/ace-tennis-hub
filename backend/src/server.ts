@@ -7,7 +7,7 @@ import { apiRouter } from './modules';
 import { authenticate } from './middleware/authenticate';
 
 const app = express();
-const PORT = process.env.PORT || 3009;
+const PORT = process.env.PORT;
 
 app.use(
   cors({

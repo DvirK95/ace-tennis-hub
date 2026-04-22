@@ -4,8 +4,14 @@ import { Separator } from '@/components/ui/separator';
 import { Landmark } from 'lucide-react';
 import LoginForm from '@/features/login/LoginForm/LoginForm';
 import LoginGoogleAuth from '@/features/login/LoginGoogleAuth/LoginGoogleAuth';
+import { tokenStorage } from '@/lib/tokenStorage';
+import { Navigate } from 'react-router-dom';
 
 export default function LoginPage() {
+  const isAuthenticated = tokenStorage.get();
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
       <div className="pointer-events-none absolute inset-0">
