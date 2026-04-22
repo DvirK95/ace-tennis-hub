@@ -20,11 +20,11 @@ export class UserService {
     return users.map(({ password: _p, ...user }) => ({
       ...user,
       createdAt: user.createdAt.toISOString(),
-    })) as User[];
+    })) as unknown as User[];
   }
 
   async createUser(data: CreateUserInput): Promise<User> {
-    const passwordHash = await bcrypt.hash(data.password, 10);
+    const passwordHash = await bcrypt.hash(data.password ?? '', 10);
     const user = await prisma.user.create({
       data: {
         fullName: data.fullName,
@@ -32,7 +32,7 @@ export class UserService {
         password: passwordHash,
         phone: data.phone,
         role: data.role,
-        makeupCredits: data.makeupCredits ?? 0,
+        makeupCredits: 0,
       },
     });
 
@@ -40,7 +40,7 @@ export class UserService {
     return {
       ...safe,
       createdAt: user.createdAt.toISOString(),
-    } as User;
+    } as unknown as User;
   }
 }
 

@@ -68,18 +68,17 @@ export class AuthService {
     return user;
   }
   async getAuthenticatedUser(token: string): Promise<AuthenticatedUser> {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
-      sub: string;
-    };
+    const jwtSecret = process.env.JWT_SECRET as string;
+    const decoded = jwt.verify(token, jwtSecret);
     const user = await prisma.user.findUnique({
-      where: { id: decoded.sub },
+      where: { id: decoded.sub as string },
     });
     if (!decoded || !user) {
       throw new Error('INVALID_TOKEN');
     }
     return {
       user: user as unknown as AuthenticatedUser['user'],
-      sub: decoded.sub,
+      sub: decoded.sub as string,
       permissions: [],
     };
   }

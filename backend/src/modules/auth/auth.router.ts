@@ -60,15 +60,13 @@ define(
     method: 'get',
     path: '/getAuthUser',
     tags: ['Auth'],
+    summary: 'Get authenticated user',
     responses: {
       200: {
         description: 'Get authenticated user successful',
         content: {
           'application/json': { schema: AuthenticatedUserSchema },
         },
-      },
-      401: {
-        description: 'Authentication failed',
       },
     },
   },

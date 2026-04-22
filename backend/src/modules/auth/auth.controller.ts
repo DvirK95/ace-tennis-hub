@@ -25,16 +25,15 @@ export class AuthController {
   }
   async getAuthenticatedUser(req: Request, res: Response) {
     try {
-      const user = await authService.getAuthenticatedUser(
-        req.headers.authorization ?? '',
-      );
-      res.status(200).json(user);
-    } catch (error) {
-      if (error instanceof Error && error.message === 'INVALID_TOKEN') {
-        res.status(401).json({ error: 'Authentication failed' });
+      const token = req.headers.authorization?.split(' ')?.[1] ?? '';
+      if (!token) {
+        res.status(401).json();
         return;
       }
-      res.status(500).json({ error: 'Internal Server Error' });
+      const user = await authService.getAuthenticatedUser(token);
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json();
     }
   }
 }

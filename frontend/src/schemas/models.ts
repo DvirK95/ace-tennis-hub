@@ -62,3 +62,9 @@ export interface LoginRequest {
   /** @minLength 6 */
   password: string;
 }
+
+export interface AuthenticatedUser {
+  user: User;
+  sub: string;
+  permissions: string[];
+}

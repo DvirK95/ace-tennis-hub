@@ -25,7 +25,7 @@ app.get('/api-json', (_req, res) => res.json(openApiDocument));
 app.use(
   '/api',
   (req, res, next) => {
-    if (req.path.startsWith('/auth/')) return next();
+    if (req.path.toLowerCase().startsWith('/auth/login')) return next();
     return authenticate(req, res, next);
   },
   apiRouter,

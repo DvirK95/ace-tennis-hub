@@ -7,7 +7,7 @@
  */
 
 import { customInstance } from '../lib/orvalMutator';
-import type { User, CreateUserRequest, LoginResponse, LoginRequest } from './models';
+import type { User, CreateUserRequest, LoginResponse, LoginRequest, AuthenticatedUser } from './models';
 
 export const api = {
   users: {
@@ -17,5 +17,6 @@ export const api = {
   auth: {
     login: (loginRequest: LoginRequest) => customInstance<LoginResponse>({url: `/api/auth/Login`, method: 'POST', headers: {'Content-Type': 'application/json', }, data: loginRequest }),
     register: (createUserRequest: CreateUserRequest) => customInstance<LoginResponse>({url: `/api/auth/Register`, method: 'PUT', headers: {'Content-Type': 'application/json', }, data: createUserRequest }),
+    getAuthUser: () => customInstance<AuthenticatedUser>({url: `/api/auth/getAuthUser`, method: 'GET' }),
   },
 };
