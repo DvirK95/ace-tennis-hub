@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { api } from '@/schemas/api';
 import { tokenStorage } from '@/lib/tokenStorage';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 export function useLoginForm() {
   const navigate = useNavigate();
@@ -30,6 +31,11 @@ export function useLoginForm() {
       tokenStorage.set(response.token);
       navigate('/');
     } catch (e) {
+      if (e instanceof AxiosError) {
+        if (e.response?.status === 401) {
+          form.setError('email', { message: 'Invalid email or password' });
+        }
+      }
       console.error(e);
     }
   }
