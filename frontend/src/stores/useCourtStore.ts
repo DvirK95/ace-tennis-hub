@@ -11,24 +11,45 @@ interface CourtState {
 const SEED_COURTS: Court[] = [
   {
     id: 'c1000000-0000-0000-0000-000000000001',
-    name: 'Center Court',
-    location: 'Main Building, Floor 1',
+    name: 'מגרש מרכזי',
+    location: 'בניין ראשי, קומה 1',
     surfaceType: 'Hard',
     status: 'Active',
   },
   {
     id: 'c1000000-0000-0000-0000-000000000002',
-    name: 'Court 2',
-    location: 'Outdoor East Wing',
+    name: 'מגרש 2',
+    location: 'חצר מזרחית חיצונית',
     surfaceType: 'Clay',
     status: 'Active',
   },
   {
     id: 'c1000000-0000-0000-0000-000000000003',
-    name: 'Court 3',
-    location: 'Outdoor West Wing',
+    name: 'מגרש 3',
+    location: 'חצר מערבית חיצונית',
     surfaceType: 'Grass',
     status: 'Maintenance',
+  },
+  {
+    id: 'c1000000-0000-0000-0000-000000000004',
+    name: 'מגרש 4',
+    location: 'אולם מקורה',
+    surfaceType: 'Hard',
+    status: 'Active',
+  },
+  {
+    id: 'c1000000-0000-0000-0000-000000000005',
+    name: 'מגרש 5',
+    location: 'גג בניין ב׳',
+    surfaceType: 'Hard',
+    status: 'Active',
+  },
+  {
+    id: 'c1000000-0000-0000-0000-000000000006',
+    name: 'מגרש אדמה 6',
+    location: 'פינה דרומית',
+    surfaceType: 'Clay',
+    status: 'Active',
   },
 ];
 

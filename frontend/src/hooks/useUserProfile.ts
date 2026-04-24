@@ -12,7 +12,7 @@ export function useUserProfile(userId: string) {
   const tasks = useTaskStore((s) => s.tasks);
 
   const userGroups = useMemo(
-    () => groups.filter((g) => g.memberIds.includes(userId) || g.coachId === userId),
+    () => groups.filter((g) => g.memberIds.includes(userId) || g.coachIds.includes(userId)),
     [groups, userId]
   );
 

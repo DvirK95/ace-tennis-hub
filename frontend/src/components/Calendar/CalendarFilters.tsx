@@ -1,4 +1,4 @@
-import type { CalendarViewMode } from '@/hooks/useCalendar';
+import type { CalendarView, CalendarFilterMode } from '@/hooks/useCalendar';
 import type { Court, ClubUser } from '@/types/schemas';
 import { Button } from '@/components/ui/Button/Button';
 import {
@@ -8,12 +8,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CalendarDays, Plus, CalendarRange, Calendar, Grid3x3 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface CalendarFiltersProps {
-  weekLabel: string;
-  viewMode: CalendarViewMode;
-  onViewModeChange: (mode: CalendarViewMode) => void;
+  periodLabel: string;
+  calendarView: CalendarView;
+  onViewChange: (view: CalendarView) => void;
+  filterMode: CalendarFilterMode;
+  onFilterModeChange: (mode: CalendarFilterMode) => void;
   selectedCourtId: string;
   onCourtChange: (id: string) => void;
   selectedCoachId: string;
@@ -23,12 +26,21 @@ interface CalendarFiltersProps {
   onPrev: () => void;
   onNext: () => void;
   onToday: () => void;
+  onCreateEvent: () => void;
 }
 
+const VIEW_BUTTONS: { value: CalendarView; label: string; icon: React.ReactNode }[] = [
+  { value: 'month', label: 'Month', icon: <Calendar className="h-3.5 w-3.5" /> },
+  { value: 'week', label: 'Week', icon: <CalendarRange className="h-3.5 w-3.5" /> },
+  { value: 'day', label: 'Day', icon: <Grid3x3 className="h-3.5 w-3.5" /> },
+];
+
 export default function CalendarFilters({
-  weekLabel,
-  viewMode,
-  onViewModeChange,
+  periodLabel,
+  calendarView,
+  onViewChange,
+  filterMode,
+  onFilterModeChange,
   selectedCourtId,
   onCourtChange,
   selectedCoachId,
@@ -38,18 +50,25 @@ export default function CalendarFilters({
   onPrev,
   onNext,
   onToday,
+  onCreateEvent,
 }: CalendarFiltersProps) {
   return (
     <div className="mb-4 flex flex-wrap items-center gap-3">
+      {/* Navigation */}
       <div className="flex items-center gap-1">
         <Button
           variant="outline"
           size="sm"
           onClick={onPrev}
           icon={<ChevronLeft className="h-4 w-4" />}
-          aria-label="Previous week"
+          aria-label="Previous"
         />
-        <Button variant="outline" size="sm" onClick={onToday} icon={<CalendarDays className="h-4 w-4" />}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onToday}
+          icon={<CalendarDays className="h-4 w-4" />}
+        >
           Today
         </Button>
         <Button
@@ -57,58 +76,81 @@ export default function CalendarFilters({
           size="sm"
           onClick={onNext}
           icon={<ChevronRight className="h-4 w-4" />}
-          aria-label="Next week"
+          aria-label="Next"
         />
       </div>
 
-      <span className="min-w-[180px] text-sm font-semibold text-foreground">{weekLabel}</span>
+      {/* Period label */}
+      <span className="min-w-[200px] text-sm font-semibold text-foreground">{periodLabel}</span>
 
-      <div className="ml-auto flex items-center gap-2">
-        <Select value={viewMode} onValueChange={(v) => onViewModeChange(v as CalendarViewMode)}>
+      <div className="ml-auto flex flex-wrap items-center gap-2">
+        {/* View toggle */}
+        <div className="flex rounded-md border">
+          {VIEW_BUTTONS.map(({ value, label, icon }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => onViewChange(value)}
+              className={cn(
+                'flex items-center gap-1.5 border-r px-3 py-1.5 text-xs font-medium last:border-r-0 transition-colors',
+                calendarView === value
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-background text-muted-foreground hover:bg-muted',
+              )}
+            >
+              {icon}
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Filter mode */}
+        <Select value={filterMode} onValueChange={(v) => onFilterModeChange(v as CalendarFilterMode)}>
           <SelectTrigger className="w-[140px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="global">Global Schedule</SelectItem>
-            <SelectItem value="court">By Court</SelectItem>
-            <SelectItem value="coach">By Coach</SelectItem>
+          <SelectItem value="global">All Courts</SelectItem>
+          <SelectItem value="court">By Court</SelectItem>
+          <SelectItem value="coach">By Coach</SelectItem>
           </SelectContent>
         </Select>
 
-        {viewMode === 'court' && (
+        {filterMode === 'court' && (
           <Select value={selectedCourtId} onValueChange={onCourtChange}>
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="Select court" />
             </SelectTrigger>
             <SelectContent>
               {courts.map((c) => (
-                <CourtSelectItem key={c.id} id={c.id} name={c.name} />
+                <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         )}
 
-        {viewMode === 'coach' && (
+        {filterMode === 'coach' && (
           <Select value={selectedCoachId} onValueChange={onCoachChange}>
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="Select coach" />
             </SelectTrigger>
             <SelectContent>
               {coaches.map((c) => (
-                <CoachSelectItem key={c.id} id={c.id} name={c.name} />
+                <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         )}
+
+        {/* Create event button */}
+        <Button
+          size="sm"
+          onClick={onCreateEvent}
+          icon={<Plus className="h-4 w-4" />}
+        >
+          New Event
+        </Button>
       </div>
     </div>
   );
-}
-
-function CourtSelectItem({ id, name }: { id: string; name: string }) {
-  return <SelectItem value={id}>{name}</SelectItem>;
-}
-
-function CoachSelectItem({ id, name }: { id: string; name: string }) {
-  return <SelectItem value={id}>{name}</SelectItem>;
 }

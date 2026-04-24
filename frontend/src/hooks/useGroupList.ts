@@ -31,9 +31,14 @@ export function useGroupList() {
   const columns = useMemo(
     () => [
       columnHelper.accessor('name', { header: 'Group Name', enableSorting: true }),
-      columnHelper.accessor('coachId', {
-        header: 'Coach',
-        cell: (info) => coachMap.get(info.getValue()) ?? '—',
+      columnHelper.accessor('coachIds', {
+        header: 'Coaches',
+        cell: (info) =>
+          info
+            .getValue()
+            .map((id) => coachMap.get(id) ?? '—')
+            .join(', '),
+        enableSorting: false,
       }),
       columnHelper.accessor('memberIds', {
         header: 'Members',

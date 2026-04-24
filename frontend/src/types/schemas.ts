@@ -49,7 +49,7 @@ export type ClubUserFormValues = z.infer<typeof clubUserFormSchema>;
 export const groupSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1, 'Group name is required'),
-  coachId: z.string().uuid('Select a coach'),
+  coachIds: z.array(z.string().uuid()).min(1, 'At least one coach is required'),
   memberIds: z.array(z.string().uuid()),
   schedule: z.string().min(1, 'Schedule is required'),
   courtId: z.string().uuid('Select a court'),
@@ -71,7 +71,7 @@ export const calendarEventSchema = z.object({
   eventType: eventTypeSchema,
   courtId: z.string().uuid().optional(),
   allCourts: z.boolean().default(false),
-  assigneeId: z.string().uuid().optional(),
+  assigneeIds: z.array(z.string()).default([]),
   groupId: z.string().uuid().optional(),
   date: z.string().min(1, 'Date is required'),
   startTime: z.string().min(1, 'Start time is required'),
@@ -85,11 +85,17 @@ export const eventFormSchema = z.object({
   eventType: eventTypeSchema,
   courtId: z.string().optional(),
   allCourts: z.boolean().default(false),
-  assigneeId: z.string().optional(),
+  assigneeIds: z.array(z.string()).default([]),
   groupId: z.string().optional(),
   date: z.string().min(1, 'Date is required'),
-  startTime: z.string().min(1, 'Start time is required'),
-  endTime: z.string().min(1, 'End time is required'),
+  startTime: z
+    .string()
+    .min(1, 'Start time is required')
+    .regex(/^\d{2}:\d{2}$/, 'Format: HH:MM'),
+  endTime: z
+    .string()
+    .min(1, 'End time is required')
+    .regex(/^\d{2}:\d{2}$/, 'Format: HH:MM'),
   recurrence: recurrenceTypeSchema.default('NONE'),
 });
 
@@ -99,10 +105,34 @@ export type EventType = z.infer<typeof eventTypeSchema>;
 export type RecurrenceType = z.infer<typeof recurrenceTypeSchema>;
 export type EventStatus = z.infer<typeof eventStatusSchema>;
 
+// ─── Event Attendance ────────────────────────────────────
+export const eventAttendanceStatusSchema = z.enum([
+  'Unknown',
+  'Present',
+  'Absent',
+  'Cancelled_Eligible',
+]);
+
+export const eventAttendanceSchema = z.object({
+  id: z.string().uuid(),
+  eventId: z.string().uuid(),
+  userId: z.string().uuid(),
+  status: eventAttendanceStatusSchema,
+  creditGiven: z.boolean().default(false),
+});
+
+export type EventAttendance = z.infer<typeof eventAttendanceSchema>;
+export type EventAttendanceStatus = z.infer<typeof eventAttendanceStatusSchema>;
+
 // ─── User Tasks ─────────────────────────────────────────
 export const userTaskSchema = z.object({
   id: z.string().uuid(),
+  /** The person this task is "about" / shown on their profile */
   userId: z.string().uuid(),
+  /** Who created the task (admin / coach) */
+  creatorId: z.string().uuid(),
+  /** Who is responsible for completing the task (optional) */
+  assigneeId: z.string().uuid().optional(),
   taskText: z.string().min(1, 'Task text is required'),
   startDate: z.string().min(1, 'Start date is required'),
   endDate: z.string().min(1, 'End date is required'),
@@ -111,6 +141,8 @@ export const userTaskSchema = z.object({
 
 export const taskFormSchema = z.object({
   userId: z.string().uuid('Select a user'),
+  creatorId: z.string().uuid('Select a creator'),
+  assigneeId: z.string().optional(),
   taskText: z.string().min(1, 'Task text is required'),
   startDate: z.string().min(1, 'Start date is required'),
   endDate: z.string().min(1, 'End date is required'),

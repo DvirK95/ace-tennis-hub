@@ -9,9 +9,11 @@ import {
 } from '@tanstack/react-table';
 import { useTaskStore } from '@/stores/useTaskStore';
 import { usePersonStore } from '@/stores/usePersonStore';
+import { useAuthStore } from '@/stores/useAuthStore';
 import type { UserTask, TaskFormValues } from '@/types/schemas';
 
-const columnHelper = createColumnHelper<UserTask & { userName: string }>();
+type TaskRow = UserTask & { userName: string; creatorName: string; assigneeName: string };
+const columnHelper = createColumnHelper<TaskRow>();
 
 export function useGlobalTaskList() {
   const { tasks, toggleComplete } = useTaskStore();
@@ -20,21 +22,27 @@ export function useGlobalTaskList() {
 
   const nameMap = useMemo(() => new Map(people.map((p) => [p.id, p.name])), [people]);
 
-  const incompleteTasks = useMemo(
+  const today = new Date().toISOString().split('T')[0];
+
+  const rows = useMemo(
     () =>
       tasks
         .filter((t) => !t.isComplete)
-        .map((t) => ({ ...t, userName: nameMap.get(t.userId) ?? 'Unknown' })),
-    [tasks, nameMap]
+        .map((t) => ({
+          ...t,
+          userName: nameMap.get(t.userId) ?? 'Unknown',
+          creatorName: nameMap.get(t.creatorId) ?? '—',
+          assigneeName: t.assigneeId ? (nameMap.get(t.assigneeId) ?? '—') : '—',
+        })),
+    [tasks, nameMap],
   );
-
-  const today = new Date().toISOString().split('T')[0];
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('userName', { header: 'Assigned To', enableSorting: true }),
+      columnHelper.accessor('userName', { header: 'Subject', enableSorting: true }),
       columnHelper.accessor('taskText', { header: 'Task' }),
-      columnHelper.accessor('startDate', { header: 'Start' }),
+      columnHelper.accessor('creatorName', { header: 'Created By' }),
+      columnHelper.accessor('assigneeName', { header: 'Assignee' }),
       columnHelper.accessor('endDate', {
         header: 'Due',
         cell: (info) => {
@@ -44,11 +52,11 @@ export function useGlobalTaskList() {
         },
       }),
     ],
-    [today]
+    [today],
   );
 
   const table = useReactTable({
-    data: incompleteTasks,
+    data: rows,
     columns,
     state: { sorting },
     onSortingChange: setSorting,
@@ -62,40 +70,26 @@ export function useGlobalTaskList() {
 
 export function useUserTaskList(userId: string) {
   const { tasks, addTask, updateTask, deleteTask, toggleComplete } = useTaskStore();
-  const [sorting, setSorting] = useState<SortingState>([{ id: 'endDate', desc: false }]);
+  const currentUserId = useAuthStore((s) => s.currentUserId);
   const [editingTask, setEditingTask] = useState<UserTask | null>(null);
 
   const userTasks = useMemo(() => tasks.filter((t) => t.userId === userId), [tasks, userId]);
 
-  const columns = useMemo(
-    () => [
-      createColumnHelper<UserTask>().accessor('taskText', { header: 'Task' }),
-      createColumnHelper<UserTask>().accessor('startDate', { header: 'Start' }),
-      createColumnHelper<UserTask>().accessor('endDate', { header: 'Due' }),
-      createColumnHelper<UserTask>().accessor('isComplete', {
-        header: 'Done',
-        enableSorting: false,
-      }),
-    ],
-    []
-  );
-
-  const table = useReactTable({
-    data: userTasks,
-    columns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
-
   function handleSubmit(values: TaskFormValues) {
     if (editingTask) {
-      updateTask(editingTask.id, values);
+      updateTask(editingTask.id, {
+        ...values,
+        assigneeId: values.assigneeId || undefined,
+      });
       setEditingTask(null);
     } else {
-      addTask({ ...values, id: crypto.randomUUID(), isComplete: false });
+      addTask({
+        ...values,
+        id: crypto.randomUUID(),
+        isComplete: false,
+        assigneeId: values.assigneeId || undefined,
+        creatorId: values.creatorId || currentUserId || '00000000-0000-0000-0000-000000000001',
+      });
     }
   }
 
@@ -108,7 +102,6 @@ export function useUserTaskList(userId: string) {
   }
 
   return {
-    table,
     userTasks,
     editingTask,
     handleSubmit,

@@ -2,9 +2,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { taskFormSchema, type TaskFormValues, type UserTask } from '@/types/schemas';
 import { useUserTaskList } from '@/hooks/useTaskList';
+import { usePersonStore } from '@/stores/usePersonStore';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/Button/Button';
-import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -14,30 +15,24 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Trash2, Pencil } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 interface UserTasksTabProps {
   userId: string;
 }
 
 export default function UserTasksTab({ userId }: UserTasksTabProps) {
-  const {
-    userTasks,
-    editingTask,
-    handleSubmit,
-    handleEdit,
-    handleCancelEdit,
-    deleteTask,
-    toggleComplete,
-  } = useUserTaskList(userId);
+  const { userTasks, editingTask, handleSubmit, handleEdit, handleCancelEdit, deleteTask, toggleComplete } =
+    useUserTaskList(userId);
 
   return (
     <div className="space-y-4">
@@ -52,16 +47,17 @@ export default function UserTasksTab({ userId }: UserTasksTabProps) {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead className="text-xs font-semibold uppercase">Task</TableHead>
-              <TableHead className="text-xs font-semibold uppercase">Start</TableHead>
+              <TableHead className="text-xs font-semibold uppercase">Creator</TableHead>
+              <TableHead className="text-xs font-semibold uppercase">Assignee</TableHead>
               <TableHead className="text-xs font-semibold uppercase">Due</TableHead>
-              <TableHead className="text-center text-xs font-semibold uppercase">Done</TableHead>
-              <TableHead className="w-20" />
+              <TableHead className="w-16 text-center text-xs font-semibold uppercase">Done</TableHead>
+              <TableHead className="w-16" />
             </TableRow>
           </TableHeader>
           <TableBody>
             {userTasks.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
+                <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
                   No tasks assigned
                 </TableCell>
               </TableRow>
@@ -91,85 +87,126 @@ interface TaskFormProps {
 }
 
 function TaskForm({ userId, editingTask, onSubmit, onCancel }: TaskFormProps) {
+  const people = usePersonStore((s) => s.people);
+  const currentUserId = useAuthStore((s) => s.currentUserId);
+
+  const creatorOptions = useMemo(
+    () => people.filter((p) => p.roles.includes('ADMIN') || p.roles.includes('COACH')),
+    [people],
+  );
+
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
-    defaultValues: { userId, taskText: '', startDate: '', endDate: '' },
+    defaultValues: {
+      userId,
+      creatorId: currentUserId ?? '00000000-0000-0000-0000-000000000001',
+      assigneeId: undefined,
+      taskText: '',
+      startDate: '',
+      endDate: '',
+    },
   });
 
   useEffect(() => {
     if (editingTask) {
       form.reset({
         userId: editingTask.userId,
+        creatorId: editingTask.creatorId,
+        assigneeId: editingTask.assigneeId ?? undefined,
         taskText: editingTask.taskText,
         startDate: editingTask.startDate,
         endDate: editingTask.endDate,
       });
     } else {
-      form.reset({ userId, taskText: '', startDate: '', endDate: '' });
+      form.reset({
+        userId,
+        creatorId: currentUserId ?? '00000000-0000-0000-0000-000000000001',
+        assigneeId: undefined,
+        taskText: '',
+        startDate: '',
+        endDate: '',
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingTask, userId]);
 
   function handleFormSubmit(values: TaskFormValues) {
     onSubmit(values);
-    form.reset({ userId, taskText: '', startDate: '', endDate: '' });
+    form.reset({ userId, creatorId: currentUserId ?? '', assigneeId: undefined, taskText: '', startDate: '', endDate: '' });
   }
 
+  const { register, handleSubmit: rhfSubmit, setValue, watch, formState: { errors } } = form;
+  const creatorId = watch('creatorId');
+  const assigneeId = watch('assigneeId');
+
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleFormSubmit)}
-        className="flex items-end gap-3 rounded-lg border bg-muted/30 p-3"
-      >
-        <FormField
-          control={form.control}
-          name="taskText"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <FormLabel className="text-xs">Task</FormLabel>
-              <FormControl>
-                <Input placeholder="Task description…" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="startDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-xs">Start</FormLabel>
-              <FormControl>
-                <Input type="date" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="endDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-xs">Due</FormLabel>
-              <FormControl>
-                <Input type="date" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" size="sm">
-          {editingTask ? 'Update' : 'Add'}
-        </Button>
+    <form
+      onSubmit={rhfSubmit(handleFormSubmit)}
+      className="space-y-3 rounded-lg border bg-muted/30 p-3"
+    >
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="lg:col-span-2">
+          <Label className="text-xs">Task description</Label>
+          <Input placeholder="Task description…" {...register('taskText')} className="mt-1" />
+          {errors.taskText && <p className="mt-0.5 text-xs text-destructive">{errors.taskText.message}</p>}
+        </div>
+        <div>
+          <Label className="text-xs">Start date</Label>
+          <Input type="date" {...register('startDate')} className="mt-1" />
+        </div>
+        <div>
+          <Label className="text-xs">Due date</Label>
+          <Input type="date" {...register('endDate')} className="mt-1" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div>
+          <Label className="text-xs">Created by</Label>
+          <Select
+            value={creatorId}
+            onValueChange={(v) => setValue('creatorId', v)}
+          >
+            <SelectTrigger className="mt-1 h-9 text-sm">
+              <SelectValue placeholder="Select creator" />
+            </SelectTrigger>
+            <SelectContent>
+              {creatorOptions.map((p) => (
+                <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label className="text-xs">Assigned to (optional)</Label>
+          <Select
+            value={assigneeId ?? 'none'}
+            onValueChange={(v) => setValue('assigneeId', v === 'none' ? undefined : v)}
+          >
+            <SelectTrigger className="mt-1 h-9 text-sm">
+              <SelectValue placeholder="None" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">None</SelectItem>
+              {people.map((p) => (
+                <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-2">
         {editingTask && (
           <Button type="button" variant="outline" size="sm" onClick={onCancel}>
             Cancel
           </Button>
         )}
-      </form>
-    </Form>
+        <Button type="submit" size="sm">
+          {editingTask ? 'Update' : 'Add Task'}
+        </Button>
+      </div>
+    </form>
   );
 }
 
@@ -181,15 +218,23 @@ interface TaskTableRowProps {
 }
 
 function TaskTableRow({ task, onToggle, onEdit, onDelete }: TaskTableRowProps) {
+  const people = usePersonStore((s) => s.people);
+  const nameMap = useMemo(() => new Map(people.map((p) => [p.id, p.name])), [people]);
+
   const today = new Date().toISOString().split('T')[0];
   const overdue = task.endDate < today && !task.isComplete;
 
   return (
-    <TableRow className={overdue ? 'bg-destructive/10' : ''}>
+    <TableRow className={overdue ? 'bg-destructive/5' : ''}>
       <TableCell className={`text-sm ${overdue ? 'font-semibold text-destructive' : ''}`}>
         {task.taskText}
       </TableCell>
-      <TableCell className="text-sm">{task.startDate}</TableCell>
+      <TableCell className="text-xs text-muted-foreground">
+        {nameMap.get(task.creatorId) ?? '—'}
+      </TableCell>
+      <TableCell className="text-xs text-muted-foreground">
+        {task.assigneeId ? nameMap.get(task.assigneeId) ?? '—' : '—'}
+      </TableCell>
       <TableCell className={`text-sm ${overdue ? 'font-semibold text-destructive' : ''}`}>
         {task.endDate}
       </TableCell>

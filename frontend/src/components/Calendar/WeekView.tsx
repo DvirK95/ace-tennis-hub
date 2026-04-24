@@ -1,4 +1,5 @@
 import type { CalendarEvent } from '@/types/schemas';
+import { usePersonStore } from '@/stores/usePersonStore';
 import {
   formatDate,
   formatDayLabel,
@@ -123,7 +124,7 @@ function HourSlot({ hour, dateStr, onClick }: HourSlotProps) {
 
 const EVENT_TYPE_COLORS: Record<string, string> = {
   SESSION: 'bg-primary/90 text-primary-foreground',
-  PRIVATE: 'bg-info/90 text-info-foreground',
+  PRIVATE: 'bg-sky-500/90 text-white',
   BLOCKOUT: 'bg-destructive/80 text-destructive-foreground',
 };
 
@@ -136,6 +137,12 @@ function EventBlock({ event, onClick }: EventBlockProps) {
   const top = eventTopPx(event.startTime);
   const height = Math.max(eventHeightPx(event.startTime, event.endTime), 20);
   const colorClass = EVENT_TYPE_COLORS[event.eventType] ?? 'bg-muted text-foreground';
+  const people = usePersonStore((s) => s.people);
+
+  const participantNames = event.assigneeIds
+    .slice(0, 2)
+    .map((id) => people.find((p) => p.id === id)?.name.split(' ')[0] ?? '?');
+  const extraCount = Math.max(0, event.assigneeIds.length - 2);
 
   return (
     <div
@@ -150,6 +157,12 @@ function EventBlock({ event, onClick }: EventBlockProps) {
       <p className="opacity-80">
         {event.startTime}–{event.endTime}
       </p>
+      {participantNames.length > 0 && height > 36 && (
+        <p className="truncate opacity-70">
+          {participantNames.join(', ')}
+          {extraCount > 0 && ` +${extraCount}`}
+        </p>
+      )}
     </div>
   );
 }
