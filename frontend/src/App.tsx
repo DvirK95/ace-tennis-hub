@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { Toaster } from '@/components/ui/toaster';
@@ -14,12 +13,11 @@ import UsersPage from '@/pages/UsersPage';
 import UserProfilePage from '@/pages/UserProfilePage';
 import NotFound from '@/pages/NotFound';
 import LoginPage from './pages/login/Login.page';
-
-const queryClient = new QueryClient();
+import QueryClientProviderWrapper from './lib/QueryClientProviderWrapper';
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProviderWrapper>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -40,6 +38,6 @@ export default function App() {
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
-    </QueryClientProvider>
+    </QueryClientProviderWrapper>
   );
 }

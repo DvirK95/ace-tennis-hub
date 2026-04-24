@@ -42,13 +42,13 @@ function Sidebar() {
             label="Approvals"
           />
         )}
-        {canAccess('MANAGE_USERS') && (
-          <SidebarNavItem
-            to="/permissions"
-            icon={<ShieldCheck className="h-4 w-4" />}
-            label="Permissions"
-          />
-        )}
+        {/* {canAccess('MANAGE_USERS') && ( */}
+        <SidebarNavItem
+          to="/permissions"
+          icon={<ShieldCheck className="h-4 w-4" />}
+          label="Permissions"
+        />
+        {/* )} */}
       </nav>
     </aside>
   );
