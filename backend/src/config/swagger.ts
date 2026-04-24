@@ -20,6 +20,8 @@ export function generateOpenApiDocument() {
       title: 'AceClub API',
       description: 'The backend API for AceClub Manager',
     },
-    servers: [{ url: `http://localhost:${process.env.PORT}` }],
+    servers: [
+      { url: process.env.SERVER_URL ?? `http://localhost:${process.env.PORT}` },
+    ],
   });
 }
