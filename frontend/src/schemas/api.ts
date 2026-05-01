@@ -7,7 +7,7 @@
  */
 
 import { customInstance } from '../lib/orvalMutator';
-import type { User, CreateUserRequest, LoginResponse, LoginRequest, AuthenticatedUser } from './models';
+import type { User, CreateUserRequest, LoginResponse, LoginRequest, AuthenticatedUser, Court, GetApiRolesGetAllRoles200 } from './models';
 
 export const api = {
   users: {
@@ -18,5 +18,12 @@ export const api = {
     login: (loginRequest: LoginRequest) => customInstance<LoginResponse>({url: `/api/auth/Login`, method: 'POST', headers: {'Content-Type': 'application/json', }, data: loginRequest }),
     register: (createUserRequest: CreateUserRequest) => customInstance<LoginResponse>({url: `/api/auth/Register`, method: 'PUT', headers: {'Content-Type': 'application/json', }, data: createUserRequest }),
     getAuthUser: () => customInstance<AuthenticatedUser>({url: `/api/auth/getAuthUser`, method: 'GET' }),
+  },
+  roles: {
+    getAllRoles: () => customInstance<GetApiRolesGetAllRoles200>({url: `/api/roles/GetAllRoles`, method: 'GET' }),
+  },
+  courts: {
+    getAllCourts: () => customInstance<Court[]>({url: `/api/courts/GetAllCourts`, method: 'GET' }),
+    createCourt: () => customInstance<Court>({url: `/api/courts/CreateCourt`, method: 'POST' }),
   },
 };

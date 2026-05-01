@@ -14,12 +14,19 @@ export const UserRole = {
   TRAINEE: 'TRAINEE',
 } as const;
 
+export type UserGender = typeof UserGender[keyof typeof UserGender];
+
+export const UserGender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+} as const;
+
 export interface User {
   id: string;
   /** @minLength 2 */
   fullName: string;
   email: string;
-  phone?: string;
+  phone: string;
   role: UserRole;
   /** @minimum 0 */
   makeupCredits?: number;
@@ -29,6 +36,14 @@ export interface User {
      * @nullable
      */
   password: string | null;
+  birthDate: string;
+  gender: UserGender;
+  /** @nullable */
+  address: string | null;
+  /** @nullable */
+  membershipStartDate: string | null;
+  /** @nullable */
+  membershipEndDate: string | null;
 }
 
 export type CreateUserRequestRole = typeof CreateUserRequestRole[keyof typeof CreateUserRequestRole];
@@ -39,17 +54,32 @@ export const CreateUserRequestRole = {
   TRAINEE: 'TRAINEE',
 } as const;
 
+export type CreateUserRequestGender = typeof CreateUserRequestGender[keyof typeof CreateUserRequestGender];
+
+export const CreateUserRequestGender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+} as const;
+
 export interface CreateUserRequest {
   /** @minLength 2 */
   fullName: string;
   email: string;
-  phone?: string;
+  phone: string;
   role: CreateUserRequestRole;
   /**
      * @minLength 8
      * @nullable
      */
   password: string | null;
+  birthDate: string;
+  gender: CreateUserRequestGender;
+  /** @nullable */
+  address: string | null;
+  /** @nullable */
+  membershipStartDate: string | null;
+  /** @nullable */
+  membershipEndDate: string | null;
 }
 
 export interface LoginResponse {
@@ -68,3 +98,23 @@ export interface AuthenticatedUser {
   sub: string;
   permissions: string[];
 }
+
+export type CourtSurface = typeof CourtSurface[keyof typeof CourtSurface];
+
+export const CourtSurface = {
+  TENNIS_HARD: 'TENNIS_HARD',
+  PADEL: 'PADEL',
+  PICKELBALL: 'PICKELBALL',
+} as const;
+
+export interface Court {
+  id: string;
+  name: string;
+  /** @nullable */
+  location: string | null;
+  surface: CourtSurface;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export type GetApiRolesGetAllRoles200 = { [key: string]: unknown };
