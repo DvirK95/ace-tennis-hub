@@ -3,8 +3,9 @@ import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import type { CourtSchema } from './courts.schema';
+import { environments } from '../../config/environments';
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL!,
+  connectionString: environments.DATABASE_URL,
 });
 const adapter = new PrismaPg(pool);
 
