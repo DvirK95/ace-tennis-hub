@@ -10,5 +10,13 @@ export class CourtController {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+  async createCourt(req: Request, res: Response) {
+    try {
+      const court = await courtService.createCourt(req.body);
+      res.status(201).json(court);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 }
 export const courtController = new CourtController();

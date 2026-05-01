@@ -20,6 +20,15 @@ export class CourtService {
       createdAt: court.createdAt.toISOString(),
     })) as unknown as Court[];
   }
+  async createCourt(data: Court): Promise<Court> {
+    const newCourt = {
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    await prisma.court.create({ data: newCourt });
+    return newCourt as unknown as Court;
+  }
 }
 
 export const courtService = new CourtService();
