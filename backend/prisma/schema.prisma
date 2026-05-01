@@ -19,3 +19,15 @@ model User {
 
   @@map("users")
 }
+
+model Court {
+  id        String   @id @default(uuid())
+  name      String
+  location  String?
+  surface   String   @default("TENNIS_HARD")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("courts")
+}
