@@ -18,7 +18,7 @@ export function useLoginForm() {
     },
   });
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: api.auth.login,
   });
 
@@ -43,5 +43,6 @@ export function useLoginForm() {
   return {
     form,
     handleSubmit,
+    isPending,
   };
 }

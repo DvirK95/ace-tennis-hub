@@ -2,9 +2,11 @@ import { useLoginForm } from './useLoginForm';
 import { composeButtonClasses } from '@/components/ui/Button/buttonClasses';
 import { cn } from '@/lib/utils';
 import FormField from '@/components/forms/FormField';
+import { Loader2 } from 'lucide-react';
 
 function LoginForm() {
-  const { form, handleSubmit } = useLoginForm();
+  const { form, handleSubmit, isPending } = useLoginForm();
+
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
       <FormField
@@ -26,8 +28,12 @@ function LoginForm() {
         placeholder="Your password"
       />
 
-      <button type="submit" className={cn(composeButtonClasses({ className: 'w-full' }))}>
-        Login
+      <button
+        type="submit"
+        className={cn(composeButtonClasses({ className: 'w-full' }))}
+        disabled={isPending}
+      >
+        {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Login'}
       </button>
     </form>
   );
